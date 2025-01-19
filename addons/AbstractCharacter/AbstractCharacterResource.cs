@@ -21,7 +21,7 @@ public partial class AbstractCharacterResource : Resource
 
     [Export] public TypeEnum CharacterType { get; set; } = TypeEnum.NPC;
 
-    [Export] public ExplosionResource HitExplosionResource { get; set; }
+    // [Export] public ExplosionResource HitExplosionResource { get; set; }
 
     [Export] public OrientationEnum InitialOrientation { get; set; } = OrientationEnum.Down;
 

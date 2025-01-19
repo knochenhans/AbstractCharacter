@@ -1,16 +1,16 @@
 using System;
 using Godot;
 
-public partial class AbstractCharacter : CharacterBody2D
+public partial class AbstractCharacter2D : CharacterBody2D
 {
-    [Export] public CharacterResource CharacterResource { get; set; }
+    [Export] public AbstractCharacterResource CharacterResource { get; set; }
     [Export] public PackedScene CharacterControllerScene { get; set; }
 
     [Signal] public delegate void RequestCurrentTileDataEventHandler(Character character);
     [Signal] public delegate void TargetPositionSetEventHandler(Vector2 position);
     [Signal] public delegate void TargetPositionReachedEventHandler();
     [Signal] public delegate void DiedEventHandler(Vector2 position);
-    [Signal] public delegate void HitEventHandler(Vector2 position, ExplosionResource explosionResource);
+    // [Signal] public delegate void HitEventHandler(Vector2 position, ExplosionResource explosionResource);
     [Signal] public delegate void HealthChangedEventHandler(int health, int healthMax);
 
     public enum ActivityStateEnum
@@ -107,7 +107,7 @@ public partial class AbstractCharacter : CharacterBody2D
         }
     }
 
-    protected CharacterController CharacterController { get; set; }
+    protected AbstractCharacterController2D CharacterController { get; set; }
 
     protected NavigationAgent2D NavigationAgent2D => GetNode<NavigationAgent2D>("NavigationAgent2D");
 
@@ -142,7 +142,7 @@ public partial class AbstractCharacter : CharacterBody2D
     protected Area2D ScanArea => GetNode<Area2D>("ScanArea");
     protected Area2D PickupArea => GetNode<Area2D>("PickupArea");
 
-    public virtual AbstractCharacter WithData(CharacterResource characterResource, PackedScene characterControllerScene)
+    public virtual AbstractCharacter2D WithData(AbstractCharacterResource characterResource, PackedScene characterControllerScene)
     {
         CharacterResource = characterResource;
         CharacterControllerScene = characterControllerScene;
@@ -162,8 +162,8 @@ public partial class AbstractCharacter : CharacterBody2D
 
         SetupSounds();
 
-        CharacterController = CharacterControllerScene.Instantiate() as CharacterController;
-        CharacterController.Character = this;
+        CharacterController = CharacterControllerScene.Instantiate() as AbstractCharacterController2D;
+        CharacterController.ControlledCharacter = this;
         CharacterController.CharacterNoticed += OnCharacterControllerCharacterNoticed;
         AddChild(CharacterController);
 
@@ -175,10 +175,9 @@ public partial class AbstractCharacter : CharacterBody2D
         (scanAreaShape.Shape as CircleShape2D).Radius = CharacterResource.ScanRadius;
 
         PickupArea.AreaEntered += OnPickupAreaAreaEntered;
-
-
-        SpawnedSoundPlayer.Play();
     }
+
+    public void Spawn() => SpawnedSoundPlayer.Play();
 
     private void SetupSounds()
     {
@@ -287,7 +286,7 @@ public partial class AbstractCharacter : CharacterBody2D
                 // Flash character
                 LifeState = LifeStateEnum.Hit;
             }
-            EmitSignal(SignalName.Hit, Position, CharacterResource.HitExplosionResource);
+            // EmitSignal(SignalName.Hit, Position, CharacterResource.HitExplosionResource);
             EmitSignal(SignalName.HealthChanged, Health, CharacterResource.HealthMax);
         }
     }
@@ -336,7 +335,7 @@ public partial class AbstractCharacter : CharacterBody2D
                 {
                     LastCheckedTile = currentTile;
                     EmitSignal(SignalName.RequestCurrentTileData, this);
-                    GD.Print("New tile entered");
+                    // GD.Print("New tile entered");
                 }
             }
         }
