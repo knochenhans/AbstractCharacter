@@ -6,7 +6,7 @@ public partial class AbstractCharacter2D : CharacterBody2D
     [Export] public AbstractCharacterResource CharacterResource { get; set; }
     [Export] public PackedScene CharacterControllerScene { get; set; }
 
-    [Signal] public delegate void RequestCurrentTileDataEventHandler(Character character);
+    [Signal] public delegate void RequestCurrentTileDataEventHandler(AbstractCharacter2D character);
     [Signal] public delegate void TargetPositionSetEventHandler(Vector2 position);
     [Signal] public delegate void TargetPositionReachedEventHandler();
     [Signal] public delegate void DiedEventHandler(Vector2 position);
@@ -260,7 +260,7 @@ public partial class AbstractCharacter2D : CharacterBody2D
     {
     }
 
-    public virtual void OnCharacterControllerCharacterNoticed(Character player)
+    public virtual void OnCharacterControllerCharacterNoticed(AbstractCharacter2D player)
     {
         NoticedSoundPlayer.Play();
     }

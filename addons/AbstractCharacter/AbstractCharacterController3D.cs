@@ -3,7 +3,7 @@ using System;
 
 public partial class AbstractCharacterController3D : Node3D
 {
-    [Signal] public delegate void CharacterNoticedEventHandler(Character character);
+    [Signal] public delegate void CharacterNoticedEventHandler(AbstractCharacter3D character);
     
     public enum ActivityStateEnum
     {

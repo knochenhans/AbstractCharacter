@@ -6,7 +6,7 @@ public partial class AbstractCharacter3D : CharacterBody3D
     [Export] public AbstractCharacterResource CharacterResource { get; set; }
     [Export] public PackedScene CharacterControllerScene { get; set; }
 
-    [Signal] public delegate void RequestCurrentTileDataEventHandler(Character character);
+    [Signal] public delegate void RequestCurrentTileDataEventHandler(AbstractCharacter3D character);
     [Signal] public delegate void TargetPositionSetEventHandler(Vector3 position);
     [Signal] public delegate void TargetPositionReachedEventHandler();
     [Signal] public delegate void DiedEventHandler(Vector3 position);
@@ -71,6 +71,7 @@ public partial class AbstractCharacter3D : CharacterBody3D
     private ActivityStateEnum _activityState = ActivityStateEnum.Active;
     private MovementStateEnum _movementState = MovementStateEnum.Idle;
     private LifeStateEnum _lifeState = LifeStateEnum.Living;
+    private string _currentAnimationPrefix;
 
     protected virtual void OnActivityStateChange(ActivityStateEnum newState)
     {
@@ -83,15 +84,16 @@ public partial class AbstractCharacter3D : CharacterBody3D
         switch (newState)
         {
             case MovementStateEnum.Idle:
-                // _currentAnimationPrefix = CharacterResource.IdlePrefix;
+                _currentAnimationPrefix = CharacterResource.IdlePrefix;
                 MovementSoundPlayer.StopLoop();
                 break;
             case MovementStateEnum.Moving:
-                // _currentAnimationPrefix = CharacterResource.MovementPrefix;
+                _currentAnimationPrefix = CharacterResource.MovementPrefix;
                 EmitSignal(SignalName.RequestCurrentTileData, this);
                 MovementSoundPlayer.StartLoop();
                 break;
         }
+        PlayCurrentAnimation();
     }
 
     protected virtual void OnLifeStateChange(LifeStateEnum newState)
@@ -175,6 +177,8 @@ public partial class AbstractCharacter3D : CharacterBody3D
         (scanAreaShape.Shape as SphereShape3D).Radius = CharacterResource.ScanRadius;
 
         PickupArea.AreaEntered += OnPickupAreaAreaEntered;
+        _currentAnimationPrefix = CharacterResource.IdlePrefix;
+        MovementState = MovementStateEnum.Idle;
     }
 
     public void Spawn() => SpawnedSoundPlayer.Play();
@@ -219,7 +223,7 @@ public partial class AbstractCharacter3D : CharacterBody3D
             player.PitchScale = CharacterResource.Pitch + (float)GD.RandRange(-CharacterResource.RandomPitch, CharacterResource.RandomPitch);
     }
 
-    public void SetOrientation(Vector3 direction)
+    public void SetOrientation2D(Vector2 direction)
     {
         if (Math.Abs(direction.X) > Math.Abs(direction.Y))
         {
@@ -235,6 +239,12 @@ public partial class AbstractCharacter3D : CharacterBody3D
             else if (direction.Y < 0)
                 Orientation = AbstractCharacterResource.OrientationEnum.Up;
         }
+        PlayCurrentAnimation();
+    }
+
+    public void PlayCurrentAnimation()
+    {
+        AnimatedSprite3D.Play(_currentAnimationPrefix + "_" + Orientation.ToString().ToLower());
     }
 
     public virtual void TurnTowards(Vector3 targetPosition)
@@ -242,7 +252,7 @@ public partial class AbstractCharacter3D : CharacterBody3D
         if (ActivityState == ActivityStateEnum.Active && (LifeState == LifeStateEnum.Living || LifeState == LifeStateEnum.Hit))
         {
             Vector3 direction = Position.DirectionTo(targetPosition);
-            SetOrientation(direction);
+            // SetOrientation2D(direction);
         }
     }
 
@@ -260,7 +270,7 @@ public partial class AbstractCharacter3D : CharacterBody3D
     {
     }
 
-    public virtual void OnCharacterControllerCharacterNoticed(Character player)
+    public virtual void OnCharacterControllerCharacterNoticed(AbstractCharacter3D player)
     {
         NoticedSoundPlayer.Play();
     }
@@ -303,30 +313,30 @@ public partial class AbstractCharacter3D : CharacterBody3D
                 // if (Position.DistanceTo(NavigationAgent3D.TargetPosition) < 5)
                 // 	EmitSignal(SignalName.TargetPositionReached);
 
-                if (NavigationAgent3D.IsNavigationFinished())
-                {
-                    AnimatedSprite3D.Play("idle_" + Orientation.ToString().ToLower());
-                    MovementState = MovementStateEnum.Idle;
-                    EmitSignal(SignalName.TargetPositionReached);
-                    Logger.Log($"Character {Name} reached target position", Logger.LogTypeEnum.Character);
-                }
+                // if (NavigationAgent3D.IsNavigationFinished())
+                // {
+                //     AnimatedSprite3D.Play("idle_" + Orientation.ToString().ToLower());
+                //     MovementState = MovementStateEnum.Idle;
+                //     EmitSignal(SignalName.TargetPositionReached);
+                //     Logger.Log($"Character {Name} reached target position", Logger.LogTypeEnum.Character);
+                // }
+                // else
+                // {
+                // Vector3 currentAgentPosition = Position;
+                // Vector3 nextPathPosition = NavigationAgent3D.GetNextPathPosition();
+
+                // Velocity = currentAgentPosition.DirectionTo(nextPathPosition) * MovementSpeed;
+
+                // SetOrientation(Velocity);
+
+                // AnimatedSprite3D.Play("walk_" + Orientation.ToString().ToLower());
+                MoveAndSlide();
+
+                if (Velocity.Length() > 0)
+                    MovementState = MovementStateEnum.Moving;
                 else
-                {
-                    Vector3 currentAgentPosition = Position;
-                    Vector3 nextPathPosition = NavigationAgent3D.GetNextPathPosition();
-
-                    Velocity = currentAgentPosition.DirectionTo(nextPathPosition) * MovementSpeed;
-
-                    // SetOrientation(Velocity);
-
-                    AnimatedSprite3D.Play("walk_" + Orientation.ToString().ToLower());
-                    MoveAndSlide();
-
-                    if (Velocity.Length() > 0)
-                        MovementState = MovementStateEnum.Moving;
-                    else
-                        MovementState = MovementStateEnum.Idle;
-                }
+                    MovementState = MovementStateEnum.Idle;
+                // }
 
                 // Check if character is on a different tile than before
                 Vector3I currentTile = (Vector3I)(Position / TileSize);
