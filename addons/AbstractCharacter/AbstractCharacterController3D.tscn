@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://cr3yf4mtmq87t"]
+[gd_scene load_steps=2 format=3 uid="uid://b4h3rurkxqijv"]
 
-[ext_resource type="Script" path="res://addons/AbstractCharacter/AbstractCharacterController3D.cs" id="1_a6clh"]
+[ext_resource type="Script" path="res://addons/AbstractCharacter/AbstractCharacterController3D.cs" id="1_ksu1n"]
 
 [node name="AbstractCharacterController3D" type="Node3D"]
-script = ExtResource("1_a6clh")
+script = ExtResource("1_ksu1n")

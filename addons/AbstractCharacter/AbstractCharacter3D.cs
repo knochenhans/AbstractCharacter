@@ -75,8 +75,8 @@ public partial class AbstractCharacter3D : CharacterBody3D
 
     protected virtual void OnActivityStateChange(ActivityStateEnum newState)
     {
-        HitSoundPlayer.ActivityState = newState == ActivityStateEnum.Active ? TimedAudioStreamPlayer3D.ActivityStateEnum.Active : TimedAudioStreamPlayer3D.ActivityStateEnum.Inactive;
-        IdleSoundPlayer.ActivityState = newState == ActivityStateEnum.Active ? TimedAudioStreamPlayer3D.ActivityStateEnum.Active : TimedAudioStreamPlayer3D.ActivityStateEnum.Inactive;
+        HitSound.ActivityState = newState == ActivityStateEnum.Active ? TimedAudioStreamPlayer3D.ActivityStateEnum.Active : TimedAudioStreamPlayer3D.ActivityStateEnum.Inactive;
+        IdleSound.ActivityState = newState == ActivityStateEnum.Active ? TimedAudioStreamPlayer3D.ActivityStateEnum.Active : TimedAudioStreamPlayer3D.ActivityStateEnum.Inactive;
     }
 
     protected virtual void OnMovementStateChange(MovementStateEnum newState)
@@ -84,13 +84,13 @@ public partial class AbstractCharacter3D : CharacterBody3D
         switch (newState)
         {
             case MovementStateEnum.Idle:
-                _currentAnimationPrefix = CharacterResource.IdlePrefix;
-                MovementSoundPlayer.StopLoop();
+                // _currentAnimationPrefix = CharacterResource.IdlePrefix;
+                MovementSound.StopLoop();
                 break;
             case MovementStateEnum.Moving:
-                _currentAnimationPrefix = CharacterResource.MovementPrefix;
+                // _currentAnimationPrefix = CharacterResource.MovementPrefix;
                 EmitSignal(SignalName.RequestCurrentTileData, this);
-                MovementSoundPlayer.StartLoop();
+                MovementSound.StartLoop();
                 break;
         }
         PlayCurrentAnimation();
@@ -113,12 +113,12 @@ public partial class AbstractCharacter3D : CharacterBody3D
 
     protected NavigationAgent3D NavigationAgent3D => GetNode<NavigationAgent3D>("NavigationAgent3D");
 
-    protected TimedAudioStreamPlayer3D HitSoundPlayer => GetNode<TimedAudioStreamPlayer3D>("HitSoundPlayer");
-    protected TimedAudioStreamPlayer3D IdleSoundPlayer => GetNode<TimedAudioStreamPlayer3D>("IdleSoundPlayer");
-    protected AudioStreamPlayer3D DeathSoundPlayer => GetNode<AudioStreamPlayer3D>("DeathSoundPlayer");
-    protected AudioStreamPlayer3D NoticedSoundPlayer => GetNode<AudioStreamPlayer3D>("NoticedSoundPlayer");
-    protected TimedAudioStreamPlayer3D MovementSoundPlayer => GetNode<TimedAudioStreamPlayer3D>("MovementSoundPlayer");
-    protected AudioStreamPlayer3D SpawnedSoundPlayer => GetNode<AudioStreamPlayer3D>("SpawnedSoundPlayer");
+    protected TimedAudioStreamPlayer3D HitSound => GetNode<TimedAudioStreamPlayer3D>("HitSound");
+    protected TimedAudioStreamPlayer3D IdleSound => GetNode<TimedAudioStreamPlayer3D>("IdleSound");
+    protected AudioStreamPlayer3D DeathSound => GetNode<AudioStreamPlayer3D>("DeathSound");
+    protected AudioStreamPlayer3D NoticedSound => GetNode<AudioStreamPlayer3D>("NoticedSound");
+    protected TimedAudioStreamPlayer3D MovementSound => GetNode<TimedAudioStreamPlayer3D>("MovementSound");
+    protected AudioStreamPlayer3D SpawnedSound => GetNode<AudioStreamPlayer3D>("SpawnedSound");
 
     public AbstractCharacterResource.OrientationEnum Orientation { get; set; }
 
@@ -177,18 +177,18 @@ public partial class AbstractCharacter3D : CharacterBody3D
         (scanAreaShape.Shape as SphereShape3D).Radius = CharacterResource.ScanRadius;
 
         PickupArea.AreaEntered += OnPickupAreaAreaEntered;
-        _currentAnimationPrefix = CharacterResource.IdlePrefix;
+        // _currentAnimationPrefix = CharacterResource.IdlePrefix;
         MovementState = MovementStateEnum.Idle;
     }
 
-    public void Spawn() => SpawnedSoundPlayer.Play();
+    public void Spawn() => SpawnedSound.Play();
 
     private void SetupSounds()
     {
-        MovementSoundPlayer.AddSoundSetsFromRaw(CharacterResource.MovementSounds);
-        IdleSoundPlayer.AddSoundSet("idle", CharacterResource.IdleSounds);
-        IdleSoundPlayer.CurrentSoundSet = "idle";
-        HitSoundPlayer.SetStreams(CharacterResource.HitSounds);
+        MovementSound.AddSoundSetsFromRaw(CharacterResource.MovementSounds);
+        IdleSound.AddSoundSet("idle", CharacterResource.IdleSounds);
+        IdleSound.CurrentSoundSet = "idle";
+        HitSound.SetStreams(CharacterResource.HitSounds);
 
         var DeathAudioStreamRandomizer = new AudioStreamRandomizer();
         var NoticedAudioStreamRandomizer = new AudioStreamRandomizer();
@@ -197,26 +197,26 @@ public partial class AbstractCharacter3D : CharacterBody3D
         foreach (AudioStream audioStream in CharacterResource.NoticeSounds)
             NoticedAudioStreamRandomizer.AddStream(-1, audioStream);
 
-        NoticedSoundPlayer.Stream = NoticedAudioStreamRandomizer;
+        NoticedSound.Stream = NoticedAudioStreamRandomizer;
 
         foreach (AudioStream audioStream in CharacterResource.SpawnSounds)
             SpawnedAudioStreamRandomizer.AddStream(-1, audioStream);
 
-        SpawnedSoundPlayer.Stream = SpawnedAudioStreamRandomizer;
+        SpawnedSound.Stream = SpawnedAudioStreamRandomizer;
 
         foreach (AudioStream audioStream in CharacterResource.DeathSounds)
             DeathAudioStreamRandomizer.AddStream(-1, audioStream);
 
-        DeathSoundPlayer.Stream = DeathAudioStreamRandomizer;
+        DeathSound.Stream = DeathAudioStreamRandomizer;
 
         // Set pitch for all audio players and add random pitch +/-
         var audioPlayers = new[]
         {
-            IdleSoundPlayer,
-            MovementSoundPlayer,
-            NoticedSoundPlayer,
-            SpawnedSoundPlayer,
-            DeathSoundPlayer
+            IdleSound,
+            MovementSound,
+            NoticedSound,
+            SpawnedSound,
+            DeathSound
         };
 
         foreach (var player in audioPlayers)
@@ -259,7 +259,7 @@ public partial class AbstractCharacter3D : CharacterBody3D
     public async void Die()
     {
         LifeState = LifeStateEnum.Dying;
-        DeathSoundPlayer.Play();
+        DeathSound.Play();
         AnimatedSprite3D.Play("death");
 
         await ToSignal(AnimatedSprite3D, "animation_finished");
@@ -272,13 +272,13 @@ public partial class AbstractCharacter3D : CharacterBody3D
 
     public virtual void OnCharacterControllerCharacterNoticed(AbstractCharacter3D player)
     {
-        NoticedSoundPlayer.Play();
+        NoticedSound.Play();
     }
 
     public void SetCurrentTileData(TileData tileData)
     {
         if (tileData != null)
-            MovementSoundPlayer.CurrentSoundSet = tileData.GetCustomData("surface").ToString();
+            MovementSound.CurrentSoundSet = tileData.GetCustomData("surface").ToString();
     }
 
     public virtual void OnHit(int damage)
@@ -291,7 +291,7 @@ public partial class AbstractCharacter3D : CharacterBody3D
                 Die();
             else
             {
-                HitSoundPlayer.Play();
+                HitSound.Play();
 
                 // Flash character
                 LifeState = LifeStateEnum.Hit;

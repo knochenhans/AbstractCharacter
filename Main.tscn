@@ -1,3 +1,131 @@
-[gd_scene format=3 uid="uid://b6hgtovmvgd5u"]
+[gd_scene load_steps=16 format=3 uid="uid://b6hgtovmvgd5u"]
+
+[ext_resource type="Script" path="res://addons/AbstractCharacter/AbstractCharacter2D.cs" id="1_giyqj"]
+[ext_resource type="Script" path="res://Main.cs" id="1_h06tv"]
+[ext_resource type="Resource" uid="uid://bkq3sgas2aps7" path="res://addons/AbstractCharacter/AbstractCharacter.tres" id="2_at1ie"]
+[ext_resource type="PackedScene" uid="uid://nq3woe0gbwus" path="res://addons/TimedAudioPlayer/TimedAudioStreamPlayer2D.tscn" id="3_bxwg5"]
+[ext_resource type="PackedScene" uid="uid://534lvlg1l2ot" path="res://addons/AbstractCharacter/AbstractCharacterController2D.tscn" id="3_y6hgl"]
+[ext_resource type="Script" path="res://addons/TimedAudioPlayer/TimedAudioStreamPlayerResource.cs" id="4_5tj80"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_p7bkn"]
+
+[sub_resource type="Resource" id="Resource_dfphg"]
+resource_local_to_scene = true
+script = ExtResource("4_5tj80")
+MinWaitTime = 0.0
+PlayOnLoopStart = true
+Autoplay = false
+Pitch = 1.0
+SoundSets = {}
+RandomWaitTime = 0.0
+RandomPitchAdded = 1.1
+RandomVolumeAdded = 1.0
+
+[sub_resource type="Resource" id="Resource_jyxiy"]
+resource_local_to_scene = true
+script = ExtResource("4_5tj80")
+MinWaitTime = 0.0
+PlayOnLoopStart = true
+Autoplay = false
+Pitch = 1.0
+SoundSets = {}
+RandomWaitTime = 0.0
+RandomPitchAdded = 1.1
+RandomVolumeAdded = 1.0
+
+[sub_resource type="Resource" id="Resource_ela0c"]
+resource_local_to_scene = true
+script = ExtResource("4_5tj80")
+MinWaitTime = 0.0
+PlayOnLoopStart = true
+Autoplay = false
+Pitch = 1.0
+SoundSets = {}
+RandomWaitTime = 0.0
+RandomPitchAdded = 1.1
+RandomVolumeAdded = 1.0
+
+[sub_resource type="Resource" id="Resource_xxs0b"]
+resource_local_to_scene = true
+script = ExtResource("4_5tj80")
+MinWaitTime = 0.0
+PlayOnLoopStart = true
+Autoplay = false
+Pitch = 1.0
+SoundSets = {}
+RandomWaitTime = 0.0
+RandomPitchAdded = 1.1
+RandomVolumeAdded = 1.0
+
+[sub_resource type="Resource" id="Resource_ksqw4"]
+resource_local_to_scene = true
+script = ExtResource("4_5tj80")
+MinWaitTime = 0.0
+PlayOnLoopStart = true
+Autoplay = false
+Pitch = 1.0
+SoundSets = {}
+RandomWaitTime = 0.0
+RandomPitchAdded = 1.1
+RandomVolumeAdded = 1.0
+
+[sub_resource type="Resource" id="Resource_xxb6q"]
+resource_local_to_scene = true
+script = ExtResource("4_5tj80")
+MinWaitTime = 0.0
+PlayOnLoopStart = true
+Autoplay = false
+Pitch = 1.0
+SoundSets = {}
+RandomWaitTime = 0.0
+RandomPitchAdded = 1.1
+RandomVolumeAdded = 1.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_r7udk"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_bn5de"]
 
 [node name="Main" type="Node2D"]
+script = ExtResource("1_h06tv")
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="."]
+position = Vector2(231, 160)
+script = ExtResource("1_giyqj")
+CharacterResource = ExtResource("2_at1ie")
+CharacterControllerScene = ExtResource("3_y6hgl")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
+shape = SubResource("CapsuleShape2D_p7bkn")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CharacterBody2D"]
+
+[node name="MovementSound" parent="CharacterBody2D" instance=ExtResource("3_bxwg5")]
+TimedAudioStreamPlayerResource = SubResource("Resource_dfphg")
+
+[node name="IdleSound" parent="CharacterBody2D" instance=ExtResource("3_bxwg5")]
+TimedAudioStreamPlayerResource = SubResource("Resource_jyxiy")
+
+[node name="HitSound" parent="CharacterBody2D" instance=ExtResource("3_bxwg5")]
+TimedAudioStreamPlayerResource = SubResource("Resource_ela0c")
+
+[node name="NoticedSound" parent="CharacterBody2D" instance=ExtResource("3_bxwg5")]
+TimedAudioStreamPlayerResource = SubResource("Resource_xxs0b")
+
+[node name="SpawnedSound" parent="CharacterBody2D" instance=ExtResource("3_bxwg5")]
+TimedAudioStreamPlayerResource = SubResource("Resource_ksqw4")
+
+[node name="DeathSound" parent="CharacterBody2D" instance=ExtResource("3_bxwg5")]
+TimedAudioStreamPlayerResource = SubResource("Resource_xxb6q")
+
+[node name="ScanArea" type="Area2D" parent="CharacterBody2D"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D/ScanArea"]
+shape = SubResource("CircleShape2D_r7udk")
+
+[node name="PickupArea" type="Area2D" parent="CharacterBody2D"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D/PickupArea"]
+shape = SubResource("CircleShape2D_bn5de")
+
+[node name="HealthTimer" type="Timer" parent="."]
+autostart = true

@@ -5,21 +5,21 @@ public partial class AbstractCharacterResource : Resource
 {
     public enum OrientationEnum
     {
-        Idle,
+        None,
         Up,
         Down,
         Left,
         Right
     }
 
-    public enum TypeEnum
+    public enum CharacterTypeEnum
     {
         Player,
         Enemy,
         NPC
     }
 
-    [Export] public TypeEnum CharacterType { get; set; } = TypeEnum.NPC;
+    [Export] public CharacterTypeEnum CharacterType { get; set; } = CharacterTypeEnum.NPC;
 
     // [Export] public ExplosionResource HitExplosionResource { get; set; }
 
@@ -30,10 +30,16 @@ public partial class AbstractCharacterResource : Resource
     [Export] public float MovementSpeed { get; set; }
     [Export] public int ScanRadius { get; set; }
 
+    [Export]
+    public Dictionary<CharacterStateManager.LifeSubStateEnum, float> StateLengths { get; set; } = new Dictionary<CharacterStateManager.LifeSubStateEnum, float> {
+        { CharacterStateManager.LifeSubStateEnum.Spawning, 1.0f },
+        { CharacterStateManager.LifeSubStateEnum.Dying, 1.0f },
+        { CharacterStateManager.LifeSubStateEnum.Hit, 1.0f },
+    };
+
     [ExportGroup("Sprite")]
     [Export] public SpriteFrames SpriteFrames { get; set; } = new();
-    [Export] public string IdlePrefix { get; set; } = "idle";
-    [Export] public string MovementPrefix { get; set; } = "move";
+    [Export] public Array<string> AnimationPrefixes { get; set; } = new Array<string> { "idle", "move", "hit", "dying", "spawn" };
 
     [ExportGroup("Sounds")]
     [Export] public Array<AudioStream> MovementSounds { get; set; } = new();
