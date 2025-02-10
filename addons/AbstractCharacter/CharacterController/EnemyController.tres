@@ -1,0 +1,6 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://cexx7c0rv6gxd"]
+
+[ext_resource type="Script" path="res://resources/AICharacterControllerResource.cs" id="1_db1jd"]
+
+[resource]
+script = ExtResource("1_db1jd")

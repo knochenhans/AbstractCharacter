@@ -5,7 +5,7 @@
 
 [node name="TimedAudioStreamPlayer3D" type="AudioStreamPlayer3D"]
 script = ExtResource("1_36atd")
-TimedAudioStreamPlayer3DResource = ExtResource("2_mpccp")
+TimedAudioStreamPlayerResource = ExtResource("2_mpccp")
 
 [node name="Timer" type="Timer" parent="."]
 one_shot = true

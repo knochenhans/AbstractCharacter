@@ -1,0 +1,9 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://bk3b6c8q2m0qt"]
+
+[ext_resource type="Script" path="res://addons/AbstractCharacter/AbstractCharacterStateResource.cs" id="1_abpsy"]
+
+[resource]
+script = ExtResource("1_abpsy")
+ID = "spawn"
+Duration = 1.0
+DefaultNextState = "idle"

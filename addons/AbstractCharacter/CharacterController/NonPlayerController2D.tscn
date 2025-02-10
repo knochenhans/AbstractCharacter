@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://c86y5n3r67bj0"]
+
+[ext_resource type="Script" path="res://addons/AbstractCharacter/CharacterController/NonPlayerController2D.cs" id="1_bbsqd"]
+[ext_resource type="Resource" uid="uid://bcjarsxva0un5" path="res://addons/AbstractCharacter/CharacterController/NonPlayerController.tres" id="2_mnyat"]
+
+[node name="NonPlayerController" type="Node2D"]
+script = ExtResource("1_bbsqd")
+NonPlayerControllerResource = ExtResource("2_mnyat")
+
+[node name="DecisionTimer" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
+autostart = true

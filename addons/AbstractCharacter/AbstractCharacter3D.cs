@@ -1,148 +1,93 @@
 using System;
 using Godot;
 
-public partial class AbstractCharacter3D : CharacterBody3D
+public partial class AbstractCharacter3D : CharacterBody3D, ICharacter
 {
     [Export] public AbstractCharacterResource CharacterResource { get; set; }
     [Export] public PackedScene CharacterControllerScene { get; set; }
 
     [Signal] public delegate void RequestCurrentTileDataEventHandler(AbstractCharacter3D character);
+    [Signal] public delegate void DiedEventHandler(Vector3 position);
     [Signal] public delegate void TargetPositionSetEventHandler(Vector3 position);
     [Signal] public delegate void TargetPositionReachedEventHandler();
-    [Signal] public delegate void DiedEventHandler(Vector3 position);
-    // [Signal] public delegate void HitEventHandler(Vector3 position, ExplosionResource explosionResource);
     [Signal] public delegate void HealthChangedEventHandler(int health, int healthMax);
 
-    public enum ActivityStateEnum
+    public CharacterSoundManager3D SoundManager;
+    protected NavigationAgent3D NavigationAgent3D;
+    protected AnimatedSprite3D AnimatedSprite3D => GetNode<AnimatedSprite3D>("AnimatedSprite3D");
+
+    public CharacterStateManager StateManager;
+    public CharacterTileManager TileManager;
+    public CharacterControllerManager3D ControllerManager;
+    public CharacterAreaManager3D AreaManager;
+
+    private int _health;
+    public int Health
     {
-        Active,
-        Inactive
+        get => _health;
+        set => _health = value;
     }
 
-    public enum MovementStateEnum
+    public CharacterStateManager.ActivityStateEnum ActivityState
     {
-        Idle,
-        Moving
+        get => StateManager.ActivityState;
+        set => StateManager.ActivityState = value;
     }
 
-    public enum LifeStateEnum
+    public CharacterStateManager.MovementStateEnum MovementState
     {
-        Living,
-        Hit,
-        Dying
+        get => StateManager.MovementState;
+        set => StateManager.MovementState = value;
     }
 
-    public ActivityStateEnum ActivityState
-    {
-        get => _activityState;
-        set
-        {
-            OnActivityStateChange(value);
-            _activityState = value;
-        }
-    }
+    CharacterStateManager ICharacter.StateManager => StateManager;
 
-    public MovementStateEnum MovementState
-    {
-        get => _movementState;
-        set
-        {
-            if (_movementState != value)
-            {
-                OnMovementStateChange(value);
-                _movementState = value;
-            }
-        }
-    }
-
-    public LifeStateEnum LifeState
-    {
-        get => _lifeState;
-        set
-        {
-            if (_lifeState != value)
-            {
-                OnLifeStateChange(value);
-                _lifeState = value;
-            }
-        }
-    }
-
-    private ActivityStateEnum _activityState = ActivityStateEnum.Active;
-    private MovementStateEnum _movementState = MovementStateEnum.Idle;
-    private LifeStateEnum _lifeState = LifeStateEnum.Living;
-    private string _currentAnimationPrefix;
-
-    protected virtual void OnActivityStateChange(ActivityStateEnum newState)
-    {
-        HitSound.ActivityState = newState == ActivityStateEnum.Active ? TimedAudioStreamPlayer3D.ActivityStateEnum.Active : TimedAudioStreamPlayer3D.ActivityStateEnum.Inactive;
-        IdleSound.ActivityState = newState == ActivityStateEnum.Active ? TimedAudioStreamPlayer3D.ActivityStateEnum.Active : TimedAudioStreamPlayer3D.ActivityStateEnum.Inactive;
-    }
-
-    protected virtual void OnMovementStateChange(MovementStateEnum newState)
-    {
-        switch (newState)
-        {
-            case MovementStateEnum.Idle:
-                // _currentAnimationPrefix = CharacterResource.IdlePrefix;
-                MovementSound.StopLoop();
-                break;
-            case MovementStateEnum.Moving:
-                // _currentAnimationPrefix = CharacterResource.MovementPrefix;
-                EmitSignal(SignalName.RequestCurrentTileData, this);
-                MovementSound.StartLoop();
-                break;
-        }
-        PlayCurrentAnimation();
-    }
-
-    protected virtual void OnLifeStateChange(LifeStateEnum newState)
-    {
-        switch (newState)
-        {
-            case LifeStateEnum.Living:
-                break;
-            case LifeStateEnum.Hit:
-                break;
-            case LifeStateEnum.Dying:
-                break;
-        }
-    }
-
-    protected AbstractCharacterController3D CharacterController { get; set; }
-
-    protected NavigationAgent3D NavigationAgent3D => GetNode<NavigationAgent3D>("NavigationAgent3D");
-
-    protected TimedAudioStreamPlayer3D HitSound => GetNode<TimedAudioStreamPlayer3D>("HitSound");
-    protected TimedAudioStreamPlayer3D IdleSound => GetNode<TimedAudioStreamPlayer3D>("IdleSound");
-    protected AudioStreamPlayer3D DeathSound => GetNode<AudioStreamPlayer3D>("DeathSound");
-    protected AudioStreamPlayer3D NoticedSound => GetNode<AudioStreamPlayer3D>("NoticedSound");
-    protected TimedAudioStreamPlayer3D MovementSound => GetNode<TimedAudioStreamPlayer3D>("MovementSound");
-    protected AudioStreamPlayer3D SpawnedSound => GetNode<AudioStreamPlayer3D>("SpawnedSound");
+    public Timer LifeStateTimer => GetNode<Timer>("LifeStateTimer");
 
     public AbstractCharacterResource.OrientationEnum Orientation { get; set; }
 
-    public int Health { get; set; }
-    protected int MovementSpeed { get; set; }
+    public float MovementSpeed { get; set; }
+    public float Friction { get; set; }
 
-    public Vector3I TileSize { get; set; } = Vector3I.Zero;
-    public Vector3I LastCheckedTile { get; set; } = Vector3I.Zero;
+    public Vector2 MovementTarget2D { get; set; }
 
-    public Vector3 MovementTarget
+    public Vector3 MovementTarget3D
     {
         get => NavigationAgent3D.TargetPosition;
         set
         {
             NavigationAgent3D.TargetPosition = value;
-            MovementState = MovementStateEnum.Moving;
+            MovementState = CharacterStateManager.MovementStateEnum.Moving;
             EmitSignal(SignalName.TargetPositionSet, value);
         }
     }
 
-    protected AnimatedSprite3D AnimatedSprite3D => GetNode<AnimatedSprite3D>("AnimatedSprite3D");
+    public override void _Ready()
+    {
+        Logger.Log($"Initializing character node {Name}", Logger.LogTypeEnum.Character);
 
-    protected Area3D ScanArea => GetNode<Area3D>("ScanArea");
-    protected Area3D PickupArea => GetNode<Area3D>("PickupArea");
+        Orientation = CharacterResource.InitialOrientation;
+
+        AnimatedSprite3D.SpriteFrames = CharacterResource.SpriteFrames;
+        AnimatedSprite3D.SpriteFrames.ResourceLocalToScene = true;
+
+        LifeStateTimer.Timeout += OnLifeStateTimeout;
+
+        StateManager = new CharacterStateManager(this);
+        StateManager.SetLifeState("spawn");
+        StateManager.LifeStateChanged += OnLifeStateChanged;
+
+        SoundManager = new CharacterSoundManager3D(this);
+        ControllerManager = new CharacterControllerManager3D(this);
+        AreaManager = new CharacterAreaManager3D(this);
+
+        NavigationAgent3D = new NavigationAgent3D();
+        AddChild(NavigationAgent3D);
+
+        Health = CharacterResource.HealthMax;
+        MovementSpeed = CharacterResource.MovementSpeed;
+        Friction = 5;
+    }
 
     public virtual AbstractCharacter3D WithData(AbstractCharacterResource characterResource, PackedScene characterControllerScene)
     {
@@ -151,79 +96,40 @@ public partial class AbstractCharacter3D : CharacterBody3D
         return this;
     }
 
-    public override void _Ready()
+    private void OnLifeStateChanged(CharacterState newState)
     {
-        Logger.Log($"Initializing character node {this.Name}", Logger.LogTypeEnum.Character);
-
-        Health = CharacterResource.HealthMax;
-
-        Orientation = CharacterResource.InitialOrientation;
-
-        AnimatedSprite3D.SpriteFrames = CharacterResource.SpriteFrames;
-        AnimatedSprite3D.SpriteFrames.ResourceLocalToScene = true;
-
-        SetupSounds();
-
-        CharacterController = CharacterControllerScene.Instantiate() as AbstractCharacterController3D;
-        CharacterController.ControlledCharacter = this;
-        CharacterController.CharacterNoticed += OnCharacterControllerCharacterNoticed;
-        AddChild(CharacterController);
-
-        Area3D scanArea = GetNode<Area3D>("ScanArea");
-        scanArea.BodyEntered += (body) => CharacterController.OnScanArea3DBodyEntered(body);
-        scanArea.BodyExited += (body) => CharacterController.OnScanArea3DBodyExited(body);
-
-        var scanAreaShape = scanArea.GetNode<CollisionShape3D>("CollisionShape3D");
-        (scanAreaShape.Shape as SphereShape3D).Radius = CharacterResource.ScanRadius;
-
-        PickupArea.AreaEntered += OnPickupAreaAreaEntered;
-        // _currentAnimationPrefix = CharacterResource.IdlePrefix;
-        MovementState = MovementStateEnum.Idle;
-    }
-
-    public void Spawn() => SpawnedSound.Play();
-
-    private void SetupSounds()
-    {
-        MovementSound.AddSoundSetsFromRaw(CharacterResource.MovementSounds);
-        IdleSound.AddSoundSet("idle", CharacterResource.IdleSounds);
-        IdleSound.CurrentSoundSet = "idle";
-        HitSound.SetStreams(CharacterResource.HitSounds);
-
-        var DeathAudioStreamRandomizer = new AudioStreamRandomizer();
-        var NoticedAudioStreamRandomizer = new AudioStreamRandomizer();
-        var SpawnedAudioStreamRandomizer = new AudioStreamRandomizer();
-
-        foreach (AudioStream audioStream in CharacterResource.NoticeSounds)
-            NoticedAudioStreamRandomizer.AddStream(-1, audioStream);
-
-        NoticedSound.Stream = NoticedAudioStreamRandomizer;
-
-        foreach (AudioStream audioStream in CharacterResource.SpawnSounds)
-            SpawnedAudioStreamRandomizer.AddStream(-1, audioStream);
-
-        SpawnedSound.Stream = SpawnedAudioStreamRandomizer;
-
-        foreach (AudioStream audioStream in CharacterResource.DeathSounds)
-            DeathAudioStreamRandomizer.AddStream(-1, audioStream);
-
-        DeathSound.Stream = DeathAudioStreamRandomizer;
-
-        // Set pitch for all audio players and add random pitch +/-
-        var audioPlayers = new[]
+        switch (newState.ID)
         {
-            IdleSound,
-            MovementSound,
-            NoticedSound,
-            SpawnedSound,
-            DeathSound
-        };
+            case "dead":
+                EmitSignal(SignalName.Died, GlobalTransform.Origin);
+                break;
+        }
 
-        foreach (var player in audioPlayers)
-            player.PitchScale = CharacterResource.Pitch + (float)GD.RandRange(-CharacterResource.RandomPitch, CharacterResource.RandomPitch);
+        SoundManager.PlaySound(newState.ID);
+        PlayAnimation(newState.ID);
+
+        Logger.Log($"Character {Name} changed life state to {newState.ID}", Logger.LogTypeEnum.Character);
     }
 
-    public void SetOrientation2D(Vector2 direction)
+    public void SetOrientation(Vector3 direction)
+    {
+        if (Math.Abs(direction.X) > Math.Abs(direction.Z))
+        {
+            if (direction.X >= 0)
+                Orientation = AbstractCharacterResource.OrientationEnum.Right;
+            else if (direction.X < 0)
+                Orientation = AbstractCharacterResource.OrientationEnum.Left;
+        }
+        else
+        {
+            if (direction.Z >= 0)
+                Orientation = AbstractCharacterResource.OrientationEnum.Down;
+            else if (direction.Z < 0)
+                Orientation = AbstractCharacterResource.OrientationEnum.Up;
+        }
+    }
+
+    public void SetOrientation(Vector2 direction)
     {
         if (Math.Abs(direction.X) > Math.Abs(direction.Y))
         {
@@ -239,115 +145,82 @@ public partial class AbstractCharacter3D : CharacterBody3D
             else if (direction.Y < 0)
                 Orientation = AbstractCharacterResource.OrientationEnum.Up;
         }
-        PlayCurrentAnimation();
-    }
-
-    public void PlayCurrentAnimation()
-    {
-        AnimatedSprite3D.Play(_currentAnimationPrefix + "_" + Orientation.ToString().ToLower());
     }
 
     public virtual void TurnTowards(Vector3 targetPosition)
     {
-        if (ActivityState == ActivityStateEnum.Active && (LifeState == LifeStateEnum.Living || LifeState == LifeStateEnum.Hit))
-        {
-            Vector3 direction = Position.DirectionTo(targetPosition);
-            // SetOrientation2D(direction);
-        }
+        if (ActivityState != CharacterStateManager.ActivityStateEnum.Active)
+            return;
+
+        if (StateManager.LifeState.ID == "dead" || StateManager.LifeState.ID == "dying" || StateManager.LifeState.ID == "spawn")
+            return;
+
+        Vector3 direction = GlobalTransform.Origin.DirectionTo(targetPosition);
+        SetOrientation(direction);
     }
 
-    public async void Die()
+    public virtual void TurnTowards(Vector2 targetPosition)
     {
-        LifeState = LifeStateEnum.Dying;
-        DeathSound.Play();
-        AnimatedSprite3D.Play("death");
+        if (ActivityState != CharacterStateManager.ActivityStateEnum.Active)
+            return;
 
-        await ToSignal(AnimatedSprite3D, "animation_finished");
-        EmitSignal(SignalName.Died, Position);
+        if (StateManager.LifeState.ID == "dead" || StateManager.LifeState.ID == "dying" || StateManager.LifeState.ID == "spawn")
+            return;
+
+        Vector3 direction = GlobalTransform.Origin.DirectionTo(new Vector3(targetPosition.X, GlobalTransform.Origin.Y, targetPosition.Y));
+        SetOrientation(direction);
     }
 
     public virtual void OnPickupAreaAreaEntered(Area3D area)
+    { }
+
+    public virtual void OnCharacterControllerCharacterNoticed(AbstractCharacter3D player) => SoundManager.PlaySound("noticed");
+
+    public virtual void Hit(int damage)
     {
+        if (ActivityState != CharacterStateManager.ActivityStateEnum.Active)
+            return;
+
+        if (StateManager.LifeState.ID != "idle")
+            return;
+
+        Health -= damage;
+
+        if (Health <= 0)
+            StateManager.SetLifeState("dying");
+        else if (Health < CharacterResource.HealthMax)
+            StateManager.SetLifeState("hit");
+        else
+            StateManager.SetLifeState("idle");
+
+        EmitSignal(SignalName.HealthChanged, Health, CharacterResource.HealthMax);
     }
 
-    public virtual void OnCharacterControllerCharacterNoticed(AbstractCharacter3D player)
+    private void OnLifeStateTimeout() => StateManager.TransitionToNextState();
+
+    public void PlayAnimation(string animationPrefix)
     {
-        NoticedSound.Play();
-    }
-
-    public void SetCurrentTileData(TileData tileData)
-    {
-        if (tileData != null)
-            MovementSound.CurrentSoundSet = tileData.GetCustomData("surface").ToString();
-    }
-
-    public virtual void OnHit(int damage)
-    {
-        if (ActivityState == ActivityStateEnum.Active && LifeState == LifeStateEnum.Living)
-        {
-            Health -= damage;
-
-            if (Health <= 0)
-                Die();
-            else
-            {
-                HitSound.Play();
-
-                // Flash character
-                LifeState = LifeStateEnum.Hit;
-            }
-            // EmitSignal(SignalName.Hit, Position, CharacterResource.HitExplosionResource);
-            EmitSignal(SignalName.HealthChanged, Health, CharacterResource.HealthMax);
-        }
+        var animationName_ = animationPrefix + "_" + Orientation.ToString().ToLower();
+        if (AnimatedSprite3D.SpriteFrames.HasAnimation(animationName_))
+            AnimatedSprite3D.Play(animationName_);
     }
 
     public override void _PhysicsProcess(double delta)
     {
         base._PhysicsProcess(delta);
 
-        if (ActivityState == ActivityStateEnum.Active && MovementState == MovementStateEnum.Moving)
-        {
-            if (LifeState == LifeStateEnum.Living || LifeState == LifeStateEnum.Hit)
-            {
-                // Check if character is close to target position
-                // if (Position.DistanceTo(NavigationAgent3D.TargetPosition) < 5)
-                // 	EmitSignal(SignalName.TargetPositionReached);
+        if (ActivityState == CharacterStateManager.ActivityStateEnum.Inactive)
+            return;
 
-                // if (NavigationAgent3D.IsNavigationFinished())
-                // {
-                //     AnimatedSprite3D.Play("idle_" + Orientation.ToString().ToLower());
-                //     MovementState = MovementStateEnum.Idle;
-                //     EmitSignal(SignalName.TargetPositionReached);
-                //     Logger.Log($"Character {Name} reached target position", Logger.LogTypeEnum.Character);
-                // }
-                // else
-                // {
-                // Vector3 currentAgentPosition = Position;
-                // Vector3 nextPathPosition = NavigationAgent3D.GetNextPathPosition();
+        if (StateManager.LifeState.ID == "dead" || StateManager.LifeState.ID == "dying" || StateManager.LifeState.ID == "spawn")
+            return;
 
-                // Velocity = currentAgentPosition.DirectionTo(nextPathPosition) * MovementSpeed;
+        MoveAndSlide();
+        Velocity = Velocity.MoveToward(Vector3.Zero, Friction);
 
-                // SetOrientation(Velocity);
-
-                // AnimatedSprite3D.Play("walk_" + Orientation.ToString().ToLower());
-                MoveAndSlide();
-
-                if (Velocity.Length() > 0)
-                    MovementState = MovementStateEnum.Moving;
-                else
-                    MovementState = MovementStateEnum.Idle;
-                // }
-
-                // Check if character is on a different tile than before
-                Vector3I currentTile = (Vector3I)(Position / TileSize);
-
-                if (currentTile != LastCheckedTile)
-                {
-                    LastCheckedTile = currentTile;
-                    EmitSignal(SignalName.RequestCurrentTileData, this);
-                    // GD.Print("New tile entered");
-                }
-            }
-        }
+        if (Velocity.Length() > 0)
+            MovementState = CharacterStateManager.MovementStateEnum.Moving;
+        else
+            MovementState = CharacterStateManager.MovementStateEnum.Idle;
     }
 }
