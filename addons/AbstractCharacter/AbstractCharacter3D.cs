@@ -42,7 +42,8 @@ public partial class AbstractCharacter3D : CharacterBody3D, ICharacter
 
     CharacterStateManager ICharacter.StateManager => StateManager;
 
-    public Timer LifeStateTimer => GetNode<Timer>("LifeStateTimer");
+    public Timer LifeStateTimer;
+    Timer ICharacter.LifeStateTimer => LifeStateTimer;
 
     public AbstractCharacterResource.OrientationEnum Orientation { get; set; }
 
@@ -71,6 +72,8 @@ public partial class AbstractCharacter3D : CharacterBody3D, ICharacter
         AnimatedSprite3D.SpriteFrames = CharacterResource.SpriteFrames;
         AnimatedSprite3D.SpriteFrames.ResourceLocalToScene = true;
 
+        LifeStateTimer = new Timer();
+        AddChild(LifeStateTimer);
         LifeStateTimer.Timeout += OnLifeStateTimeout;
 
         StateManager = new CharacterStateManager(this);

@@ -25,6 +25,13 @@ public partial class CharacterStateManager : GodotObject
 
     private void SetupStates()
     {
+        if (_character.CharacterResource == null)
+            throw new Exception("CharacterResource is not set.");
+        if (_character.CharacterResource.States == null)
+            throw new Exception("CharacterResource.States is not set.");
+        if (_character.CharacterResource.States.Count == 0)
+            throw new Exception("CharacterResource.States is empty.");
+
         foreach (var stateResource in _character.CharacterResource.States)
         {
             LifeStates.Add(

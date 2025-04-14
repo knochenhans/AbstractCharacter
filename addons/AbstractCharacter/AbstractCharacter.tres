@@ -1,38 +1,39 @@
-[gd_resource type="Resource" load_steps=17 format=3 uid="uid://bkq3sgas2aps7"]
+[gd_resource type="Resource" load_steps=18 format=3 uid="uid://bkq3sgas2aps7"]
 
-[ext_resource type="Texture2D" uid="uid://d37xdyio07ona" path="res://idle.png" id="1_bu78d"]
+[ext_resource type="Texture2D" uid="uid://bo7bhbip7xg6l" path="res://dead.png" id="1_3hhah"]
 [ext_resource type="Texture2D" uid="uid://ce311sq05gg8j" path="res://icon.svg" id="1_cdt6k"]
-[ext_resource type="Texture2D" uid="uid://bo7bhbip7xg6l" path="res://dead.png" id="1_dwi76"]
-[ext_resource type="Script" path="res://addons/AbstractCharacter/AbstractCharacterResource.cs" id="1_wkwxs"]
-[ext_resource type="Texture2D" uid="uid://dy5ylkpdvf04v" path="res://hit.png" id="2_qa34h"]
-[ext_resource type="Texture2D" uid="uid://gov1wq0nf0rw" path="res://spawn.png" id="3_o366n"]
-[ext_resource type="Resource" uid="uid://bk3b6c8q2m0qt" path="res://resources/Spawning.tres" id="6_8f6sw"]
-[ext_resource type="Resource" uid="uid://b6lt0d1n8e1e5" path="res://resources/Idle.tres" id="7_2q2tr"]
-[ext_resource type="Resource" uid="uid://dgt7shbewie8l" path="res://resources/Hit.tres" id="8_pntwn"]
-[ext_resource type="Resource" uid="uid://bfpssdrde0hse" path="res://resources/Dying.tres" id="9_xyh7g"]
-[ext_resource type="Resource" uid="uid://dpv0u5vtbymtw" path="res://resources/Dead.tres" id="10_7qb0c"]
+[ext_resource type="Script" uid="uid://e4nse8dcvxx6" path="res://addons/AbstractCharacter/AbstractCharacterResource.cs" id="1_wkwxs"]
+[ext_resource type="Script" uid="uid://772n6fm3hfy7" path="res://addons/AbstractCharacter/AbstractCharacterStateResource.cs" id="2_6l1dg"]
+[ext_resource type="Texture2D" uid="uid://dy5ylkpdvf04v" path="res://hit.png" id="3_3720p"]
+[ext_resource type="Resource" uid="uid://bk3b6c8q2m0qt" path="res://resources/Spawning.tres" id="3_i2o0u"]
+[ext_resource type="Resource" uid="uid://b6lt0d1n8e1e5" path="res://resources/Idle.tres" id="4_3hhah"]
+[ext_resource type="Texture2D" uid="uid://d37xdyio07ona" path="res://idle.png" id="4_c25is"]
+[ext_resource type="Resource" uid="uid://dgt7shbewie8l" path="res://resources/Hit.tres" id="5_3720p"]
+[ext_resource type="Texture2D" uid="uid://gov1wq0nf0rw" path="res://spawn.png" id="5_q2eq5"]
+[ext_resource type="Resource" uid="uid://bfpssdrde0hse" path="res://resources/Dying.tres" id="6_c25is"]
+[ext_resource type="Resource" uid="uid://dpv0u5vtbymtw" path="res://resources/Dead.tres" id="7_q2eq5"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_tc4lb"]
-atlas = ExtResource("2_qa34h")
+[sub_resource type="AtlasTexture" id="AtlasTexture_c25is"]
+atlas = ExtResource("3_3720p")
 region = Rect2(0, 0, 128, 128)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_8dpfe"]
-atlas = ExtResource("2_qa34h")
+[sub_resource type="AtlasTexture" id="AtlasTexture_q2eq5"]
+atlas = ExtResource("3_3720p")
 region = Rect2(128, 0, 128, 128)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_xlcq6"]
-atlas = ExtResource("1_bu78d")
+[sub_resource type="AtlasTexture" id="AtlasTexture_riw68"]
+atlas = ExtResource("4_c25is")
 region = Rect2(0, 0, 128, 128)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_uxbdd"]
-atlas = ExtResource("1_bu78d")
+[sub_resource type="AtlasTexture" id="AtlasTexture_1hhvf"]
+atlas = ExtResource("4_c25is")
 region = Rect2(128, 0, 128, 128)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_ghb3a"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("1_dwi76")
+"texture": ExtResource("1_3hhah")
 }],
 "loop": true,
 "name": &"dead_down",
@@ -40,7 +41,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("1_dwi76")
+"texture": ExtResource("1_3hhah")
 }],
 "loop": true,
 "name": &"dead_left",
@@ -48,7 +49,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("1_dwi76")
+"texture": ExtResource("1_3hhah")
 }],
 "loop": true,
 "name": &"dead_right",
@@ -56,7 +57,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("1_dwi76")
+"texture": ExtResource("1_3hhah")
 }],
 "loop": true,
 "name": &"dead_up",
@@ -65,9 +66,6 @@ animations = [{
 "frames": [{
 "duration": 1.0,
 "texture": ExtResource("1_cdt6k")
-}, {
-"duration": 1.0,
-"texture": null
 }],
 "loop": true,
 "name": &"dying_down",
@@ -76,9 +74,6 @@ animations = [{
 "frames": [{
 "duration": 1.0,
 "texture": ExtResource("1_cdt6k")
-}, {
-"duration": 1.0,
-"texture": null
 }],
 "loop": true,
 "name": &"dying_left",
@@ -87,9 +82,6 @@ animations = [{
 "frames": [{
 "duration": 1.0,
 "texture": ExtResource("1_cdt6k")
-}, {
-"duration": 1.0,
-"texture": null
 }],
 "loop": true,
 "name": &"dying_right",
@@ -98,9 +90,6 @@ animations = [{
 "frames": [{
 "duration": 1.0,
 "texture": ExtResource("1_cdt6k")
-}, {
-"duration": 1.0,
-"texture": null
 }],
 "loop": true,
 "name": &"dying_up",
@@ -108,10 +97,10 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_tc4lb")
+"texture": SubResource("AtlasTexture_c25is")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_8dpfe")
+"texture": SubResource("AtlasTexture_q2eq5")
 }],
 "loop": true,
 "name": &"hit_down",
@@ -119,10 +108,10 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_tc4lb")
+"texture": SubResource("AtlasTexture_c25is")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_8dpfe")
+"texture": SubResource("AtlasTexture_q2eq5")
 }],
 "loop": true,
 "name": &"hit_left",
@@ -130,10 +119,10 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_tc4lb")
+"texture": SubResource("AtlasTexture_c25is")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_8dpfe")
+"texture": SubResource("AtlasTexture_q2eq5")
 }],
 "loop": true,
 "name": &"hit_right",
@@ -141,10 +130,10 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_tc4lb")
+"texture": SubResource("AtlasTexture_c25is")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_8dpfe")
+"texture": SubResource("AtlasTexture_q2eq5")
 }],
 "loop": true,
 "name": &"hit_up",
@@ -152,10 +141,10 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_xlcq6")
+"texture": SubResource("AtlasTexture_riw68")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_uxbdd")
+"texture": SubResource("AtlasTexture_1hhvf")
 }],
 "loop": true,
 "name": &"idle_down",
@@ -163,10 +152,10 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_xlcq6")
+"texture": SubResource("AtlasTexture_riw68")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_uxbdd")
+"texture": SubResource("AtlasTexture_1hhvf")
 }],
 "loop": true,
 "name": &"idle_left",
@@ -174,10 +163,10 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_xlcq6")
+"texture": SubResource("AtlasTexture_riw68")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_uxbdd")
+"texture": SubResource("AtlasTexture_1hhvf")
 }],
 "loop": true,
 "name": &"idle_right",
@@ -185,10 +174,10 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_xlcq6")
+"texture": SubResource("AtlasTexture_riw68")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_uxbdd")
+"texture": SubResource("AtlasTexture_1hhvf")
 }],
 "loop": true,
 "name": &"idle_up",
@@ -228,7 +217,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("3_o366n")
+"texture": ExtResource("5_q2eq5")
 }, {
 "duration": 1.0,
 "texture": null
@@ -239,7 +228,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("3_o366n")
+"texture": ExtResource("5_q2eq5")
 }, {
 "duration": 1.0,
 "texture": null
@@ -250,7 +239,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("3_o366n")
+"texture": ExtResource("5_q2eq5")
 }, {
 "duration": 1.0,
 "texture": null
@@ -261,7 +250,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("3_o366n")
+"texture": ExtResource("5_q2eq5")
 }, {
 "duration": 1.0,
 "texture": null
@@ -279,10 +268,10 @@ ID = "character"
 HealthMax = 10
 MovementSpeed = 150.0
 ScanRadius = 10
-States = [ExtResource("6_8f6sw"), ExtResource("7_2q2tr"), ExtResource("8_pntwn"), ExtResource("9_xyh7g"), ExtResource("10_7qb0c")]
+States = Array[ExtResource("2_6l1dg")]([ExtResource("3_i2o0u"), ExtResource("4_3hhah"), ExtResource("5_3720p"), ExtResource("6_c25is"), ExtResource("7_q2eq5")])
 SpriteFrames = SubResource("SpriteFrames_ghb3a")
-AnimationPrefixes = ["idle", "move", "hit", "dying", "spawn"]
-MovementSounds = []
-NoticeSounds = []
+AnimationPrefixes = Array[String](["idle", "move", "hit", "dying", "spawn"])
+MovementSounds = Array[AudioStream]([])
+NoticeSounds = Array[AudioStream]([])
 Pitch = 1.0
 RandomPitch = 0.0

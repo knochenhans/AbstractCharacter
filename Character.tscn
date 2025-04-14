@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://cstwlw2bj26la"]
 
-[ext_resource type="Script" path="res://addons/AbstractCharacter/AbstractCharacter2D.cs" id="1_wx423"]
+[ext_resource type="Script" uid="uid://dtu32oyv0qw1y" path="res://addons/AbstractCharacter/AbstractCharacter2D.cs" id="1_wx423"]
 [ext_resource type="Resource" uid="uid://bkq3sgas2aps7" path="res://addons/AbstractCharacter/AbstractCharacter.tres" id="2_prusg"]
 [ext_resource type="PackedScene" uid="uid://534lvlg1l2ot" path="res://addons/AbstractCharacter/CharacterController/AbstractCharacterController2D.tscn" id="3_1iva8"]
 
@@ -31,5 +31,3 @@ shape = SubResource("CircleShape2D_r7udk")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PickupArea"]
 shape = SubResource("CircleShape2D_bn5de")
-
-[node name="LifeStateTimer" type="Timer" parent="."]

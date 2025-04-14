@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://b28tk4qcxxh2y"]
 
 [ext_resource type="PackedScene" uid="uid://c86y5n3r67bj0" path="res://addons/AbstractCharacter/CharacterController/NonPlayerController2D.tscn" id="1_gqj5y"]
-[ext_resource type="Script" path="res://addons/AbstractCharacter/CharacterController/EnemyController2D.cs" id="1_rth3m"]
-[ext_resource type="Resource" uid="uid://cexx7c0rv6gxd" path="res://addons/AbstractCharacter/CharacterController/EnemyController.tres" id="3_rjhxg"]
+[ext_resource type="Script" uid="uid://d47f53ok0nqw" path="res://addons/AbstractCharacter/CharacterController/EnemyController2D.cs" id="1_rth3m"]
+[ext_resource type="Resource" uid="uid://cexx7c0rv6gxd" path="res://addons/AbstractCharacter/CharacterController/CharacterController.tres" id="3_rjhxg"]
 
 [node name="EnemyController" instance=ExtResource("1_gqj5y")]
 script = ExtResource("1_rth3m")

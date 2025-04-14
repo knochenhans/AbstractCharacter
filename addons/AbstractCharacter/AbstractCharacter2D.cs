@@ -42,7 +42,8 @@ public partial class AbstractCharacter2D : CharacterBody2D, ICharacter
 
     CharacterStateManager ICharacter.StateManager => StateManager;
 
-    public Timer LifeStateTimer => GetNode<Timer>("LifeStateTimer");
+    public Timer LifeStateTimer;
+    Timer ICharacter.LifeStateTimer => LifeStateTimer;
 
     public AbstractCharacterResource.OrientationEnum Orientation { get; set; }
 
@@ -62,7 +63,7 @@ public partial class AbstractCharacter2D : CharacterBody2D, ICharacter
 
     public Vector3 MovementTarget3D
     {
-        get => new Vector3(NavigationAgent2D.TargetPosition.X, NavigationAgent2D.TargetPosition.Y, 0);
+        get => new(NavigationAgent2D.TargetPosition.X, NavigationAgent2D.TargetPosition.Y, 0);
         set
         {
             NavigationAgent2D.TargetPosition = new Vector2(value.X, value.Y);
@@ -80,6 +81,8 @@ public partial class AbstractCharacter2D : CharacterBody2D, ICharacter
         AnimatedSprite2D.SpriteFrames = CharacterResource.SpriteFrames;
         AnimatedSprite2D.SpriteFrames.ResourceLocalToScene = true;
 
+        LifeStateTimer = new Timer();
+        AddChild(LifeStateTimer);
         LifeStateTimer.Timeout += OnLifeStateTimeout;
 
         StateManager = new CharacterStateManager(this);

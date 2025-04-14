@@ -1,6 +1,6 @@
 [gd_resource type="Resource" load_steps=2 format=3 uid="uid://bfpssdrde0hse"]
 
-[ext_resource type="Script" path="res://addons/AbstractCharacter/AbstractCharacterStateResource.cs" id="1_pefln"]
+[ext_resource type="Script" uid="uid://772n6fm3hfy7" path="res://addons/AbstractCharacter/AbstractCharacterStateResource.cs" id="1_pefln"]
 
 [resource]
 script = ExtResource("1_pefln")
