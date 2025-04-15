@@ -8,6 +8,7 @@
 script = ExtResource("1_h06tv")
 
 [node name="CharacterBody2D" parent="." instance=ExtResource("2_8kcfp")]
+position = Vector2(0, 0)
 CharacterControllerScene = ExtResource("3_ts8cd")
 
 [node name="DamageTimer" type="Timer" parent="."]

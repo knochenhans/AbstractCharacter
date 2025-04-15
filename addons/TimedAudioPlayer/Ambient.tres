@@ -3,10 +3,10 @@
 [ext_resource type="Script" uid="uid://cbfgkns32yvrf" path="res://addons/TimedAudioPlayer/TimedAudioStreamPlayerResource.cs" id="1_im3w0"]
 
 [sub_resource type="Resource" id="Resource_teqw8"]
-metadata/__load_path__ = "res://resources/sounds/water-001.wav"
+metadata/__load_path__ = "res://Resources/sounds/water-001.wav"
 
 [sub_resource type="Resource" id="Resource_a5cxn"]
-metadata/__load_path__ = "res://resources/sounds/water-002.wav"
+metadata/__load_path__ = "res://Resources/sounds/water-002.wav"
 
 [resource]
 resource_local_to_scene = true
