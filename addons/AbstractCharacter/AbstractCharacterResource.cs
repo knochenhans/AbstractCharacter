@@ -14,12 +14,13 @@ public partial class AbstractCharacterResource : Resource
 
     public enum CharacterTypeEnum
     {
+        Generic,
         Player,
         Enemy,
         NPC
     }
 
-    [Export] public CharacterTypeEnum CharacterType { get; set; } = CharacterTypeEnum.NPC;
+    [Export] public CharacterTypeEnum CharacterType { get; set; } = CharacterTypeEnum.Generic;
 
     // [Export] public ExplosionResource HitExplosionResource { get; set; }
 
