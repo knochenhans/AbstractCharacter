@@ -11,7 +11,7 @@ public partial class AbstractCharacterController2D : Node2D
         Inactive
     }
 
-    public ActivityStateEnum ActivityState { get; set; } = ActivityStateEnum.Active;
+    public ActivityStateEnum ActivityState { get; set; } = ActivityStateEnum.Inactive;
 
     public AbstractCharacter2D ControlledCharacter { get; set; }
 
