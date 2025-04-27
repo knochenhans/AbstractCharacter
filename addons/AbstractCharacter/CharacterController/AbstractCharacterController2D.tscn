@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://534lvlg1l2ot"]
+[gd_scene load_steps=2 format=3 uid="uid://gtapo8yjggkm"]
 
-[ext_resource type="Script" uid="uid://c6lqasnvrrptt" path="res://addons/AbstractCharacter/CharacterController/AbstractCharacterController2D.cs" id="1_krxsb"]
+[ext_resource type="Script" uid="uid://bp0kj0vy5jlqh" path="res://addons/AbstractCharacter/CharacterController/AbstractCharacterController.cs" id="1_xcw10"]
 
 [node name="AbstractCharacterController2D" type="Node2D"]
-script = ExtResource("1_krxsb")
+script = ExtResource("1_xcw10")

@@ -7,4 +7,6 @@ public partial class AbstractCharacterStateResource : Resource
 
     [Export] public string DefaultNextState { get; set; }
     [Export] public TimedAudioStreamPlayerResource TimedAudioStreamPlayerResource { get; set; }
+
+    [Export] public bool InputActive { get; set; } = true;
 }

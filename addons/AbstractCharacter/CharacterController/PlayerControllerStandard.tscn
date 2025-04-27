@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://dgerb51l3k02p"]
+[gd_scene load_steps=2 format=3 uid="uid://uwn00p2amu6c"]
 
-[ext_resource type="Script" uid="uid://bng1yc32ovuou" path="res://addons/AbstractCharacter/CharacterController/PlayerControllerStandard2D.cs" id="1_cdbic"]
+[ext_resource type="Script" uid="uid://crgcbrtc8ypr6" path="res://addons/AbstractCharacter/CharacterController/PlayerControllerStandard2D.cs" id="1_cdbic"]
 
-[node name="PlayerController" type="Node2D"]
+[node name="CharacterController" type="Node2D"]
 script = ExtResource("1_cdbic")

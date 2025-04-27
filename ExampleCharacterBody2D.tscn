@@ -1,0 +1,36 @@
+[gd_scene load_steps=8 format=3 uid="uid://cstwlw2bj26la"]
+
+[ext_resource type="Script" uid="uid://de15u7bng6vmu" path="res://addons/AbstractCharacter/AbstractCharacterBody2D.cs" id="1_4k3p2"]
+[ext_resource type="Script" uid="uid://utyk4tvdxpka" path="res://addons/AbstractCharacter/AbstractCharacter.cs" id="1_d677p"]
+[ext_resource type="Resource" uid="uid://dep21pacw8xc8" path="res://Resources/Character.tres" id="2_puagc"]
+[ext_resource type="PackedScene" uid="uid://uwn00p2amu6c" path="res://addons/AbstractCharacter/CharacterController/PlayerControllerStandard.tscn" id="4_o3d2x"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_p7bkn"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_r7udk"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_bn5de"]
+
+[node name="CharacterBody2D" type="CharacterBody2D"]
+motion_mode = 1
+script = ExtResource("1_4k3p2")
+
+[node name="Character" type="Node" parent="."]
+script = ExtResource("1_d677p")
+CharacterResource = ExtResource("2_puagc")
+CharacterControllerScene = ExtResource("4_o3d2x")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_p7bkn")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+
+[node name="ScanArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ScanArea"]
+shape = SubResource("CircleShape2D_r7udk")
+
+[node name="PickupArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PickupArea"]
+shape = SubResource("CircleShape2D_bn5de")

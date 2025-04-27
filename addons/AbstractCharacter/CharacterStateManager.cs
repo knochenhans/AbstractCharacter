@@ -9,17 +9,27 @@ public partial class CharacterState : GodotObject
 
     public string DefaultNextState { get; set; }
     public TimedAudioStreamPlayerResource TimedAudioStreamPlayerResource { get; set; }
+    public bool InputActive { get; set; } = true;
 }
 
 public partial class CharacterStateManager : GodotObject
 {
     [Signal] public delegate void LifeStateChangedEventHandler(CharacterState newState);
 
-    private ICharacter _character;
+    private AbstractCharacter _character;
+    // private CharacterSoundManager _soundManager;
+    // private CharacterAreaManager _areaManager;
 
-    public CharacterStateManager(ICharacter character)
+    public CharacterStateManager(
+        AbstractCharacter character
+        // CharacterSoundManager soundManager,
+        // CharacterAreaManager areaManager
+        )
     {
         _character = character;
+        // _soundManager = soundManager;
+        // _areaManager = areaManager;
+
         SetupStates();
     }
 
@@ -40,13 +50,12 @@ public partial class CharacterStateManager : GodotObject
                     ID = stateResource.ID,
                     Duration = stateResource.Duration,
                     DefaultNextState = stateResource.DefaultNextState,
-                    TimedAudioStreamPlayerResource = stateResource.TimedAudioStreamPlayerResource
+                    TimedAudioStreamPlayerResource = stateResource.TimedAudioStreamPlayerResource,
+                    InputActive = stateResource.InputActive
                 });
         }
     }
 
-    public enum ActivityStateEnum { Active, Inactive }
-    public enum MovementStateEnum { Idle, Moving }
     public Array<CharacterState> LifeStates { get; set; } = new Array<CharacterState>();
 
     private ActivityStateEnum _activityState = ActivityStateEnum.Active;
@@ -100,6 +109,7 @@ public partial class CharacterStateManager : GodotObject
             if (state.ID == stateID)
             {
                 LifeState = state;
+                Logger.Log($"Setting life state to {state.ID} for character {_character.CharacterResource.ID}", Logger.LogTypeEnum.Character);
                 return;
             }
         }
