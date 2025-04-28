@@ -52,6 +52,8 @@ public partial class AbstractCharacterBody2D : CharacterBody2D, IAbstractCharact
                     ? Character.CharacterResource.ScanRadius
                     : Character.CharacterResource.PickupRadius;
             }
+            area.AreaEntered += area == ScanArea ? OnScanAreaEntered : OnPickupAreaEntered;
+            area.AreaExited += area == ScanArea ? OnScanAreaExited : OnPickupAreaExited;
         }
     }
 
@@ -61,7 +63,7 @@ public partial class AbstractCharacterBody2D : CharacterBody2D, IAbstractCharact
 
         if (Character.CanMove())
         {
-            Velocity = CharacterController.Velocity2D.Normalized() * Character.CharacterResource.MovementSpeed;;
+            Velocity = CharacterController.Velocity2D.Normalized() * Character.CharacterResource.MovementSpeed; ;
 
             MoveAndSlide();
             Velocity = Velocity.MoveToward(Vector2.Zero, Character.CharacterResource.Friction);
@@ -115,5 +117,25 @@ public partial class AbstractCharacterBody2D : CharacterBody2D, IAbstractCharact
             Vector2 direction = Position.DirectionTo(targetPosition);
             SetOrientation(direction);
         }
+    }
+
+    public void OnScanAreaEntered(Area2D area)
+    {
+
+    }
+
+    public void OnPickupAreaEntered(Area2D area)
+    {
+
+    }
+
+    public void OnScanAreaExited(Area2D area)
+    {
+
+    }
+
+    public void OnPickupAreaExited(Area2D area)
+    {
+
     }
 }

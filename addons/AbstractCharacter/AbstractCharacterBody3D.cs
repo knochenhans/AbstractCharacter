@@ -45,6 +45,9 @@ public partial class AbstractCharacterBody3D : CharacterBody3D, IAbstractCharact
                     ? Character.CharacterResource.ScanRadius
                     : Character.CharacterResource.PickupRadius;
             }
+
+            area.AreaEntered += area == ScanArea ? OnScanAreaEntered : OnPickupAreaEntered;
+            area.AreaExited += area == ScanArea ? OnScanAreaExited : OnPickupAreaExited;
         }
     }
 
@@ -80,5 +83,25 @@ public partial class AbstractCharacterBody3D : CharacterBody3D, IAbstractCharact
             Vector3 direction = Position.DirectionTo(targetPosition);
             SetOrientation(direction);
         }
+    }
+
+    public void OnScanAreaEntered(Area3D area)
+    {
+        // Handle scan area entered
+    }
+
+    public void OnPickupAreaEntered(Area3D area)
+    {
+        // Handle pickup area entered
+    }
+
+    public void OnScanAreaExited(Area3D area)
+    {
+        // Handle scan area exited
+    }
+
+    public void OnPickupAreaExited(Area3D area)
+    {
+        // Handle pickup area exited
     }
 }
