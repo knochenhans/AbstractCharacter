@@ -36,7 +36,6 @@ public partial class AbstractCharacterBody2D : CharacterBody2D, IAbstractCharact
 
         InitAreas();
 
-        Character.StateManager.SetLifeState(Character.CharacterResource.InitialLifeState);
         CharacterController = Character.GetNode<AbstractCharacterController>("CharacterController");
         Orientation = Character.CharacterResource.InitialOrientation;
         MovementSpeed = Character.CharacterResource.MovementSpeed;

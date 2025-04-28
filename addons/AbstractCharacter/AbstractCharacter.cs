@@ -90,6 +90,7 @@ public partial class AbstractCharacter : Node
         Health = CharacterResource.HealthMax;
 
         StateManager.LifeStateChanged += OnLifeStateChanged;
+        StateManager.SetLifeState(CharacterResource.InitialLifeState);
     }
 
     public virtual AbstractCharacter WithData(AbstractCharacterResource characterResource, PackedScene characterControllerScene)
