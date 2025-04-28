@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://c3sf4iirquya4"]
+
+[ext_resource type="Script" uid="uid://cb22e5pmhwe7b" path="res://addons/AbstractCharacter/CharacterController/PlayerControllerMouse2D.cs" id="1_e6epf"]
+
+[node name="CharacterController" type="Node2D"]
+script = ExtResource("1_e6epf")

@@ -39,10 +39,10 @@ public partial class AbstractCharacterResource : Resource
 
     [ExportGroup("State")]
     [Export] public Array<AbstractCharacterStateResource> States { get; set; } = [];
-    [Export] public string InitialLifeState { get; set; } = "spawning";
-    [Export] public string StateAfterHit { get; set; } = "hit";
-    [Export] public string IdleState { get; set; } = "idle";
-    [Export] public string DeadState { get; set; } = "dead";
+    [Export] public string InitialLifeStateID { get; set; } = "spawning";
+    [Export] public string StateAfterHitID { get; set; } = "hit";
+    [Export] public string IdleStateID { get; set; } = "idle";
+    [Export] public string DeadStateID { get; set; } = "dead";
 
     [ExportGroup("Sprite")]
     [Export] public SpriteFrames SpriteFrames { get; set; } = new();

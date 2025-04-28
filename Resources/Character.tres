@@ -15,6 +15,7 @@ InitialOrientation = 2
 ID = "character"
 HealthMax = 10
 MovementSpeed = 150.0
+Friction = 0.5
 ScanRadius = 10
 PickupRadius = 10
 States = [ExtResource("3_obael"), ExtResource("4_ck2hq"), ExtResource("5_x3xpj"), ExtResource("6_3xi1y"), ExtResource("7_lqkij")]

@@ -1,7 +1,21 @@
 using Godot;
 
-public partial class PlayerControllerStandard2D : AbstractCharacterController
+public partial class ExamplePlayerController : AbstractCharacterController
 {
+    public override void _Input(InputEvent @event)
+	{
+		base._Input(@event);
+
+		if (ActivityState == ActivityStateEnum.Active)
+		{
+            if (@event is InputEventMouseMotion)
+				LookAtTarget2D = GetGlobalMousePosition();
+
+			if (@event is InputEventMouseButton mouseButton && mouseButton.ButtonIndex == MouseButton.Left && mouseButton.Pressed)
+				MovementTarget2D = GetGlobalMousePosition();
+		}
+	}
+
     public override void _PhysicsProcess(double delta)
     {
         base._PhysicsProcess(delta);

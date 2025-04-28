@@ -61,18 +61,20 @@ public partial class AbstractCharacterBody2D : CharacterBody2D, IAbstractCharact
     {
         base._PhysicsProcess(delta);
 
-        if (Character.CanMove())
+        if (Character.CanMove() && Character.StateManager.LifeState.InputActive)
         {
-            Velocity = CharacterController.Velocity2D.Normalized() * Character.CharacterResource.MovementSpeed; ;
+            Velocity = CharacterController.MovementDirection2D.Normalized() * Character.CharacterResource.MovementSpeed;
 
             MoveAndSlide();
             Velocity = Velocity.MoveToward(Vector2.Zero, Character.CharacterResource.Friction);
-            CharacterController.Velocity2D = Vector2.Zero;
+            CharacterController.MovementDirection2D = Vector2.Zero;
 
             if (Velocity.Length() > 0)
                 Character.MovementState = MovementStateEnum.Moving;
             else
                 Character.MovementState = MovementStateEnum.Idle;
+
+            TurnTowards(CharacterController.LookAtTarget2D);
         }
     }
 
@@ -112,10 +114,14 @@ public partial class AbstractCharacterBody2D : CharacterBody2D, IAbstractCharact
 
     public virtual void TurnTowards(Vector2 targetPosition)
     {
-        if (Character.CanMove())
+        if (Character.StateManager.LifeState.InputActive)
         {
             Vector2 direction = Position.DirectionTo(targetPosition);
             SetOrientation(direction);
+
+            // Rotate towards the target position
+            var angle = direction.Angle();
+            Rotation = angle;
         }
     }
 

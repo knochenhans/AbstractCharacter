@@ -2,5 +2,5 @@
 
 [ext_resource type="Script" uid="uid://bp0kj0vy5jlqh" path="res://addons/AbstractCharacter/CharacterController/AbstractCharacterController.cs" id="1_xcw10"]
 
-[node name="AbstractCharacterController2D" type="Node2D"]
+[node name="CharacterController" type="Node2D"]
 script = ExtResource("1_xcw10")

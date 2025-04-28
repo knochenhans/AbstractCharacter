@@ -61,7 +61,7 @@ public partial class AbstractCharacter : Node
         Health = CharacterResource.HealthMax;
 
         StateManager.LifeStateChanged += OnLifeStateChanged;
-        StateManager.SetLifeState(CharacterResource.InitialLifeState);
+        StateManager.SetLifeState(CharacterResource.InitialLifeStateID);
     }
 
     public virtual AbstractCharacter WithData(AbstractCharacterResource characterResource, PackedScene characterControllerScene)
@@ -84,9 +84,9 @@ public partial class AbstractCharacter : Node
         if (Health <= 0)
             StateManager.SetLifeState("dying");
         else if (Health < CharacterResource.HealthMax)
-            StateManager.SetLifeState(CharacterResource.StateAfterHit);
+            StateManager.SetLifeState(CharacterResource.StateAfterHitID);
         else
-            StateManager.SetLifeState(CharacterResource.IdleState);
+            StateManager.SetLifeState(CharacterResource.IdleStateID);
 
         EmitSignal(SignalName.HealthChanged, Health, CharacterResource.HealthMax);
     }
@@ -106,7 +106,7 @@ public partial class AbstractCharacter : Node
 
     public void OnLifeStateChanged(CharacterState state)
     {
-        if (state.ID == CharacterResource.DeadState)
+        if (state.ID == CharacterResource.DeadStateID)
             EmitSignal(SignalName.Died);
 
         Logger.Log($"Character {Name} changed life state to {state.ID}", Logger.LogTypeEnum.Character);

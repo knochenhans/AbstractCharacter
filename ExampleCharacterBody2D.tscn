@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://de15u7bng6vmu" path="res://addons/AbstractCharacter/AbstractCharacterBody2D.cs" id="1_4k3p2"]
 [ext_resource type="Script" uid="uid://utyk4tvdxpka" path="res://addons/AbstractCharacter/AbstractCharacter.cs" id="1_d677p"]
 [ext_resource type="Resource" uid="uid://dep21pacw8xc8" path="res://Resources/Character.tres" id="2_puagc"]
-[ext_resource type="PackedScene" uid="uid://uwn00p2amu6c" path="res://addons/AbstractCharacter/CharacterController/PlayerControllerStandard.tscn" id="4_o3d2x"]
+[ext_resource type="PackedScene" uid="uid://72ong4guwdsm" path="res://ExamplePlayerController.tscn" id="4_o3d2x"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_p7bkn"]
 
