@@ -89,6 +89,9 @@ public partial class AbstractCharacterBody2D : CharacterBody2D, IAbstractCharact
     public void OnLifeStateChanged(CharacterState state)
     {
         PlayAnimation(state.ID);
+
+        ScanArea.Monitoring = state.ScanActive;
+        PickupArea.Monitoring = state.PickupActive;
     }
 
     public void SetOrientation(Vector2 direction)

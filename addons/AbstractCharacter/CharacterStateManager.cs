@@ -12,6 +12,8 @@ public partial class CharacterState : GodotObject
     public bool InputActive { get; set; } = true;
     public bool MovementActive { get; set; } = true;
     public bool DamageActive { get; set; } = true;
+    public bool ScanActive { get; set; } = true;
+    public bool PickupActive { get; set; } = true;
 }
 
 public partial class CharacterStateManager : GodotObject
@@ -55,7 +57,9 @@ public partial class CharacterStateManager : GodotObject
                     TimedAudioStreamPlayerResource = stateResource.TimedAudioStreamPlayerResource,
                     InputActive = stateResource.InputActive,
                     MovementActive = stateResource.MovementActive,
-                    DamageActive = stateResource.DamageActive
+                    DamageActive = stateResource.DamageActive,
+                    ScanActive = stateResource.ScanActive,
+                    PickupActive = stateResource.PickupActive
                 });
         }
     }

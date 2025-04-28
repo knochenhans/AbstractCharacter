@@ -10,3 +10,5 @@ DefaultNextState = "idle"
 InputActive = false
 MovementActive = true
 DamageActive = false
+ScanActive = false
+PickupActive = false

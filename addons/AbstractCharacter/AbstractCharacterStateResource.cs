@@ -11,4 +11,6 @@ public partial class AbstractCharacterStateResource : Resource
     [Export] public bool InputActive { get; set; } = true;
     [Export] public bool MovementActive { get; set; } = true;
     [Export] public bool DamageActive { get; set; } = true;
+    [Export] public bool ScanActive { get; set; } = true;
+    [Export] public bool PickupActive { get; set; } = true;
 }

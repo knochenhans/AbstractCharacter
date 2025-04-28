@@ -8,7 +8,6 @@ public partial class AbstractCharacter : Node
 
     Node CharacterBody => GetParent<Node>();
 
-    // [Signal] public delegate void PlayAnimationEventHandler(string animationName);
     // [Signal] public delegate void RequestCurrentTileDataEventHandler(AbstractCharacter2D character);
     // [Signal] public delegate void TargetPositionSetEventHandler(Vector2 position);
     // [Signal] public delegate void TargetPositionReachedEventHandler();
@@ -20,41 +19,14 @@ public partial class AbstractCharacter : Node
 
     public CharacterStateManager StateManager;
     // public CharacterTileManager TileManager;
-    // public ICharacterAreaManager AreaManager;    
 
     private int _health;
-    public int Health
-    {
-        get => _health;
-        set => _health = value;
-    }
+    public int Health { get; set; }
 
-    public ActivityStateEnum ActivityState
-    {
-        get => StateManager.ActivityState;
-        set
-        {
-            StateManager.ActivityState = value;
-
-            if (value == ActivityStateEnum.Active)
-            {
-                // AreaManager.SetState(ActivityStateEnum.Active);
-            }
-            else
-            {
-                // AreaManager.SetState(ActivityStateEnum.Inactive);
-            }
-        }
-    }
-
-    public MovementStateEnum MovementState
-    {
-        get => StateManager.MovementState;
-        set => StateManager.MovementState = value;
-    }
+    public ActivityStateEnum ActivityState { get; set; }
+    public MovementStateEnum MovementState { get; set; }
 
     public Timer LifeStateTimer { get; private set; }
-
 
     public SpriteFrames GetSpriteFrames()
     {
@@ -77,7 +49,6 @@ public partial class AbstractCharacter : Node
         LifeStateTimer.Timeout += OnLifeStateTimeout;
 
         // SoundManager = new CharacterSoundManager2D(this);
-        // AreaManager = (ICharacterAreaManager)new CharacterAreaManager(this);
 
         var characterController = CharacterControllerScene.Instantiate() as AbstractCharacterController;
         AddChild(characterController);
@@ -99,11 +70,6 @@ public partial class AbstractCharacter : Node
         CharacterControllerScene = characterControllerScene;
         return this;
     }
-
-    // public virtual void OnPickupAreaAreaEntered(Area2D area)
-    // { }
-
-    // public virtual void OnCharacterControllerCharacterNoticed(AbstractCharacter2D player) => SoundManager.PlaySound("noticed");
 
     public virtual void Hit(int damage)
     {

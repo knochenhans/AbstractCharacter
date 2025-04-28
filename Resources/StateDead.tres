@@ -10,3 +10,5 @@ DefaultNextState = ""
 InputActive = false
 MovementActive = false
 DamageActive = false
+ScanActive = false
+PickupActive = false
