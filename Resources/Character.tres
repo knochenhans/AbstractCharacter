@@ -1,12 +1,12 @@
 [gd_resource type="Resource" load_steps=9 format=3 uid="uid://dep21pacw8xc8"]
 
 [ext_resource type="SpriteFrames" uid="uid://d2heib4kfrkvf" path="res://Resources/SpriteFrames.tres" id="1_obael"]
+[ext_resource type="Resource" uid="uid://bk3b6c8q2m0qt" path="res://Resources/StateSpawning.tres" id="3_obael"]
+[ext_resource type="Resource" uid="uid://b6lt0d1n8e1e5" path="res://Resources/StateIdle.tres" id="4_ck2hq"]
+[ext_resource type="Resource" uid="uid://dgt7shbewie8l" path="res://Resources/StateHit.tres" id="5_x3xpj"]
 [ext_resource type="Script" uid="uid://772n6fm3hfy7" path="res://addons/AbstractCharacter/AbstractCharacterStateResource.cs" id="6_2iuvr"]
-[ext_resource type="Resource" uid="uid://bk3b6c8q2m0qt" path="res://Resources/Spawning.tres" id="7_ll8a8"]
-[ext_resource type="Resource" uid="uid://b6lt0d1n8e1e5" path="res://Resources/Idle.tres" id="8_aeql3"]
-[ext_resource type="Resource" uid="uid://dgt7shbewie8l" path="res://Resources/Hit.tres" id="9_1c07e"]
-[ext_resource type="Resource" uid="uid://bfpssdrde0hse" path="res://Resources/Dying.tres" id="10_0xrff"]
-[ext_resource type="Resource" uid="uid://dpv0u5vtbymtw" path="res://Resources/Dead.tres" id="11_52gu8"]
+[ext_resource type="Resource" uid="uid://bfpssdrde0hse" path="res://Resources/StateDying.tres" id="6_3xi1y"]
+[ext_resource type="Resource" uid="uid://dpv0u5vtbymtw" path="res://Resources/StateDead.tres" id="7_lqkij"]
 [ext_resource type="Script" uid="uid://e4nse8dcvxx6" path="res://addons/AbstractCharacter/AbstractCharacterResource.cs" id="12_ncyua"]
 
 [resource]
@@ -17,9 +17,14 @@ ID = "character"
 HealthMax = 10
 MovementSpeed = 150.0
 ScanRadius = 10
-States = Array[ExtResource("6_2iuvr")]([ExtResource("7_ll8a8"), ExtResource("8_aeql3"), ExtResource("9_1c07e"), ExtResource("10_0xrff"), ExtResource("11_52gu8")])
+PickupRadius = 10
+States = Array[ExtResource("6_2iuvr")]([ExtResource("3_obael"), ExtResource("4_ck2hq"), ExtResource("5_x3xpj"), ExtResource("6_3xi1y"), ExtResource("7_lqkij")])
+InitialLifeState = "spawning"
+StateAfterHit = "hit"
+IdleState = "idle"
+DeadState = "dead"
 SpriteFrames = ExtResource("1_obael")
-AnimationPrefixes = Array[String](["idle", "move", "hit", "dying", "spawn"])
+AnimationPrefixes = Array[String](["idle", "move", "hit", "dying", "spawning"])
 MovementSounds = Array[AudioStream]([])
 NoticeSounds = Array[AudioStream]([])
 Pitch = 1.0

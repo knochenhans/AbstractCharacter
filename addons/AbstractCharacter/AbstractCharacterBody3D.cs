@@ -16,4 +16,9 @@ public partial class AbstractCharacterBody3D : CharacterBody3D, IAbstractCharact
     {
         throw new NotImplementedException();
     }
+
+    public void InitAreas()
+    {
+        throw new NotImplementedException();
+    }
 }

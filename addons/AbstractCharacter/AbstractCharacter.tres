@@ -3,11 +3,11 @@
 [ext_resource type="SpriteFrames" uid="uid://d2heib4kfrkvf" path="res://Resources/SpriteFrames.tres" id="1_i2o0u"]
 [ext_resource type="Script" uid="uid://e4nse8dcvxx6" path="res://addons/AbstractCharacter/AbstractCharacterResource.cs" id="1_wkwxs"]
 [ext_resource type="Script" uid="uid://772n6fm3hfy7" path="res://addons/AbstractCharacter/AbstractCharacterStateResource.cs" id="2_6l1dg"]
-[ext_resource type="Resource" uid="uid://bk3b6c8q2m0qt" path="res://Resources/Spawning.tres" id="2_yhhjp"]
-[ext_resource type="Resource" uid="uid://b6lt0d1n8e1e5" path="res://Resources/Idle.tres" id="3_i2o0u"]
-[ext_resource type="Resource" uid="uid://dgt7shbewie8l" path="res://Resources/Hit.tres" id="4_3hhah"]
-[ext_resource type="Resource" uid="uid://bfpssdrde0hse" path="res://Resources/Dying.tres" id="5_3720p"]
-[ext_resource type="Resource" uid="uid://dpv0u5vtbymtw" path="res://Resources/Dead.tres" id="6_c25is"]
+[ext_resource type="Resource" uid="uid://bk3b6c8q2m0qt" path="res://Resources/StateSpawning.tres" id="2_yhhjp"]
+[ext_resource type="Resource" uid="uid://b6lt0d1n8e1e5" path="res://Resources/StateIdle.tres" id="3_i2o0u"]
+[ext_resource type="Resource" uid="uid://dgt7shbewie8l" path="res://Resources/StateHit.tres" id="4_3hhah"]
+[ext_resource type="Resource" uid="uid://bfpssdrde0hse" path="res://Resources/StateDying.tres" id="5_3720p"]
+[ext_resource type="Resource" uid="uid://dpv0u5vtbymtw" path="res://Resources/StateDead.tres" id="6_c25is"]
 
 [resource]
 script = ExtResource("1_wkwxs")
@@ -19,7 +19,7 @@ MovementSpeed = 150.0
 ScanRadius = 10
 States = Array[ExtResource("2_6l1dg")]([ExtResource("2_yhhjp"), ExtResource("3_i2o0u"), ExtResource("4_3hhah"), ExtResource("5_3720p"), ExtResource("6_c25is")])
 SpriteFrames = ExtResource("1_i2o0u")
-AnimationPrefixes = Array[String](["idle", "move", "hit", "dying", "spawn"])
+AnimationPrefixes = Array[String](["idle", "move", "hit", "dying", "spawning"])
 MovementSounds = Array[AudioStream]([])
 NoticeSounds = Array[AudioStream]([])
 Pitch = 1.0

@@ -25,7 +25,7 @@ public partial class TimedAudioStreamPlayer2D : AudioStreamPlayer2D
 				Timer.Paused = false;
 		}
 	}
-	Dictionary<string, Array<AudioStream>> soundSets = new();
+	Dictionary<string, Array<AudioStream>> soundSets = [];
 
 	bool _isLooping = false;
 
@@ -140,14 +140,14 @@ public partial class TimedAudioStreamPlayer2D : AudioStreamPlayer2D
 
 	public void AddSoundSetsFromRaw(Array<AudioStream> streams, bool replace = false)
 	{
-		Dictionary<string, Array<AudioStream>> tempSoundSets = new();
+		Dictionary<string, Array<AudioStream>> tempSoundSets = [];
 
 		foreach (var stream in streams)
 		{
 			var prefix = stream.ResourcePath.Split("/").Last<string>().Split(".").First<string>().Split("_").First<string>();
 
 			if (!tempSoundSets.ContainsKey(prefix))
-				tempSoundSets[prefix] = new Array<AudioStream>();
+				tempSoundSets[prefix] = [];
 
 			GD.Print($"Adding sound set \"{prefix}\" to local soundSets");
 			tempSoundSets[prefix].Add(stream);

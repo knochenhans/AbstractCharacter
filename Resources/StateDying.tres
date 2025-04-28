@@ -1,0 +1,12 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://bfpssdrde0hse"]
+
+[ext_resource type="Script" uid="uid://772n6fm3hfy7" path="res://addons/AbstractCharacter/AbstractCharacterStateResource.cs" id="1_jhewf"]
+
+[resource]
+script = ExtResource("1_jhewf")
+ID = "dying"
+Duration = 2.0
+DefaultNextState = "dead"
+InputActive = true
+MovementActive = true
+DamageActive = false

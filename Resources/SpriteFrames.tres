@@ -216,7 +216,7 @@ animations = [{
 "texture": null
 }],
 "loop": true,
-"name": &"spawn_down",
+"name": &"spawning_down",
 "speed": 5.0
 }, {
 "frames": [{
@@ -227,7 +227,7 @@ animations = [{
 "texture": null
 }],
 "loop": true,
-"name": &"spawn_left",
+"name": &"spawning_left",
 "speed": 5.0
 }, {
 "frames": [{
@@ -238,7 +238,7 @@ animations = [{
 "texture": null
 }],
 "loop": true,
-"name": &"spawn_right",
+"name": &"spawning_right",
 "speed": 5.0
 }, {
 "frames": [{
@@ -249,6 +249,6 @@ animations = [{
 "texture": null
 }],
 "loop": true,
-"name": &"spawn_up",
+"name": &"spawning_up",
 "speed": 5.0
 }]

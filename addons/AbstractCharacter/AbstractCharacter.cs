@@ -109,7 +109,7 @@ public partial class AbstractCharacter : Node
         if (ActivityState != ActivityStateEnum.Active)
             return;
 
-        if (StateManager.LifeState.ID != "idle")
+        if (!StateManager.LifeState.DamageActive)
             return;
 
         Health -= damage;
@@ -117,9 +117,9 @@ public partial class AbstractCharacter : Node
         if (Health <= 0)
             StateManager.SetLifeState("dying");
         else if (Health < CharacterResource.HealthMax)
-            StateManager.SetLifeState("hit");
+            StateManager.SetLifeState(CharacterResource.StateAfterHit);
         else
-            StateManager.SetLifeState("idle");
+            StateManager.SetLifeState(CharacterResource.IdleState);
 
         EmitSignal(SignalName.HealthChanged, Health, CharacterResource.HealthMax);
     }
@@ -131,7 +131,7 @@ public partial class AbstractCharacter : Node
         if (ActivityState != ActivityStateEnum.Active)
             return false;
 
-        if (StateManager.LifeState.ID == "dead" || StateManager.LifeState.ID == "dying" || StateManager.LifeState.ID == "spawn")
+        if (!StateManager.LifeState.MovementActive)
             return false;
 
         return true;
@@ -139,12 +139,8 @@ public partial class AbstractCharacter : Node
 
     public void OnLifeStateChanged(CharacterState state)
     {
-        switch (state.ID)
-        {
-            case "dead":
-                EmitSignal(SignalName.Died);
-                break;
-        }
+        if (state.ID == CharacterResource.DeadState)
+            EmitSignal(SignalName.Died);
 
         Logger.Log($"Character {Name} changed life state to {state.ID}", Logger.LogTypeEnum.Character);
     }

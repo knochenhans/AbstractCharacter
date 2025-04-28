@@ -5,6 +5,9 @@ public partial class AbstractCharacterBody2D : CharacterBody2D, IAbstractCharact
 {
     public AbstractCharacter Character => GetNode<AbstractCharacter>("Character");
     public AnimatedSprite2D AnimatedSprite2D => GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+    public Area2D ScanArea => GetNode<Area2D>("ScanArea");
+    public Area2D PickupArea => GetNode<Area2D>("PickupArea");
+
     public AbstractCharacterController CharacterController { get; private set; }
     public AbstractCharacterResource.OrientationEnum Orientation { get; set; }
 
@@ -28,12 +31,31 @@ public partial class AbstractCharacterBody2D : CharacterBody2D, IAbstractCharact
 
         Character.Init();
         Character.StateManager.LifeStateChanged += OnLifeStateChanged;
+
         AnimatedSprite2D.SpriteFrames = Character.GetSpriteFrames();
-        Character.StateManager.SetLifeState("spawn");
+
+        InitAreas();
+
+        Character.StateManager.SetLifeState(Character.CharacterResource.InitialLifeState);
         CharacterController = Character.GetNode<AbstractCharacterController>("CharacterController");
         Orientation = Character.CharacterResource.InitialOrientation;
         MovementSpeed = Character.CharacterResource.MovementSpeed;
+
         Friction = 5;
+    }
+
+    public void InitAreas()
+    {
+        foreach (var area in new[] { ScanArea, PickupArea })
+        {
+            var collisionShape = area.GetNode<CollisionShape2D>("CollisionShape2D");
+            if (collisionShape.Shape is CircleShape2D circleShape)
+            {
+                circleShape.Radius = area == ScanArea
+                    ? Character.CharacterResource.ScanRadius
+                    : Character.CharacterResource.PickupRadius;
+            }
+        }
     }
 
     public override void _PhysicsProcess(double delta)

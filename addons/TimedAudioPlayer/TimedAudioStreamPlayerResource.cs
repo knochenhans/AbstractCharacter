@@ -8,7 +8,7 @@ public partial class TimedAudioStreamPlayerResource : Resource
     [Export] public bool Autoplay { get; set; } = false;
     [Export] public float Pitch { get; set; } = 1;
 
-    [Export] public Dictionary<string, Array<AudioStream>> SoundSets { get; set; } = new Dictionary<string, Array<AudioStream>>();
+    [Export] public Dictionary<string, Array<AudioStream>> SoundSets { get; set; } = [];
 
     [ExportGroup("Randomization Settings")]
     [Export] public double RandomWaitTime { get; set; } = 0;

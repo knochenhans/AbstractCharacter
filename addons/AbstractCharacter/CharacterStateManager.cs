@@ -10,6 +10,8 @@ public partial class CharacterState : GodotObject
     public string DefaultNextState { get; set; }
     public TimedAudioStreamPlayerResource TimedAudioStreamPlayerResource { get; set; }
     public bool InputActive { get; set; } = true;
+    public bool MovementActive { get; set; } = true;
+    public bool DamageActive { get; set; } = true;
 }
 
 public partial class CharacterStateManager : GodotObject
@@ -51,12 +53,14 @@ public partial class CharacterStateManager : GodotObject
                     Duration = stateResource.Duration,
                     DefaultNextState = stateResource.DefaultNextState,
                     TimedAudioStreamPlayerResource = stateResource.TimedAudioStreamPlayerResource,
-                    InputActive = stateResource.InputActive
+                    InputActive = stateResource.InputActive,
+                    MovementActive = stateResource.MovementActive,
+                    DamageActive = stateResource.DamageActive
                 });
         }
     }
 
-    public Array<CharacterState> LifeStates { get; set; } = new Array<CharacterState>();
+    public Array<CharacterState> LifeStates { get; set; } = [];
 
     private ActivityStateEnum _activityState = ActivityStateEnum.Active;
     private MovementStateEnum _movementState = MovementStateEnum.Idle;

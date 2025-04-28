@@ -29,18 +29,27 @@ public partial class AbstractCharacterResource : Resource
     [Export] public string ID { get; set; } = "";
     [Export] public int HealthMax { get; set; }
     [Export] public float MovementSpeed { get; set; }
-    [Export] public int ScanRadius { get; set; }
 
-    [Export] public Array<AbstractCharacterStateResource> States { get; set; } = new Array<AbstractCharacterStateResource>();
+    [ExportGroup("Areas")]
+    [Export] public int ScanRadius { get; set; } = 10;
+    [Export] public int PickupRadius { get; set; } = 10;
+
+    [ExportGroup("State")]
+    [Export] public Array<AbstractCharacterStateResource> States { get; set; } = [];
+    [Export] public string InitialLifeState { get; set; } = "spawning";
+    [Export] public string StateAfterHit { get; set; } = "hit";
+    [Export] public string IdleState { get; set; } = "idle";
+    [Export] public string DeadState { get; set; } = "dead";
 
     [ExportGroup("Sprite")]
     [Export] public SpriteFrames SpriteFrames { get; set; } = new();
-    [Export] public Array<string> AnimationPrefixes { get; set; } = new Array<string> { "idle", "move", "hit", "dying", "spawn" };
+    [Export] public Array<string> AnimationPrefixes { get; set; } = ["idle", "move", "hit", "dying", "spawning"];
 
     [ExportGroup("Sounds")]
-    [Export] public Array<AudioStream> MovementSounds { get; set; } = new();
-    [Export] public Array<AudioStream> NoticeSounds { get; set; } = new();
+    [Export] public Array<AudioStream> MovementSounds { get; set; } = [];
+    [Export] public Array<AudioStream> NoticeSounds { get; set; } = [];
 
     [Export] public float Pitch { get; set; } = 1.0f;
     [Export] public float RandomPitch { get; set; } = 0f;
+
 }
