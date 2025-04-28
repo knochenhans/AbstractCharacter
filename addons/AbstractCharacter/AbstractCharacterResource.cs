@@ -31,6 +31,7 @@ public partial class AbstractCharacterResource : Resource
     [Export] public string ID { get; set; } = "";
     [Export] public int HealthMax { get; set; }
     [Export] public float MovementSpeed { get; set; }
+    [Export] public float Friction { get; set; } = 0.5f;
 
     [ExportGroup("Areas")]
     [Export] public int ScanRadius { get; set; } = 10;

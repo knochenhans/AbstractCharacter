@@ -11,8 +11,6 @@ public partial class AbstractCharacterBody2D : CharacterBody2D, IAbstractCharact
     public AbstractCharacterController CharacterController { get; private set; }
     public AbstractCharacterResource.OrientationEnum Orientation { get; set; }
 
-    public float Friction { get; set; }
-
     // public Vector2 MovementTarget2D
     // {
     // get => NavigationAgent2D.TargetPosition;
@@ -30,8 +28,6 @@ public partial class AbstractCharacterBody2D : CharacterBody2D, IAbstractCharact
 
         InitCharacter();
         InitAreas();
-
-        Friction = 5;
     }
 
     public void InitCharacter()
@@ -68,7 +64,7 @@ public partial class AbstractCharacterBody2D : CharacterBody2D, IAbstractCharact
             Velocity = CharacterController.Velocity2D.Normalized() * Character.CharacterResource.MovementSpeed;;
 
             MoveAndSlide();
-            Velocity = Velocity.MoveToward(Vector2.Zero, Friction);
+            Velocity = Velocity.MoveToward(Vector2.Zero, Character.CharacterResource.Friction);
             CharacterController.Velocity2D = Vector2.Zero;
 
             if (Velocity.Length() > 0)
