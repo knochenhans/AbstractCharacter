@@ -9,7 +9,9 @@ public partial class AbstractCharacterResource : Resource
         Up,
         Down,
         Left,
-        Right
+        Right,
+        Forward,
+        Backward
     }
 
     public enum CharacterTypeEnum

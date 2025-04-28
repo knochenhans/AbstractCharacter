@@ -8,4 +8,5 @@ public interface IAbstractCharacterBody
     public void PlayAnimation(string animationName);
     public void OnLifeStateChanged(CharacterState state);
     public void InitAreas();
+    public void InitCharacter();
 }
